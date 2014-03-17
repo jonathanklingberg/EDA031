@@ -14,3 +14,4 @@
 
 # Added rule to exclude .DS_Store files //JOKL
 .DS_Store
+.DS\_Store
