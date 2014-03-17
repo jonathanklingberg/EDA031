@@ -11,3 +11,6 @@
 *.lai
 *.la
 *.a
+
+# Added rule to exclude .DS_Store files //JOKL
+.DS_Store
