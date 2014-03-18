@@ -8,7 +8,7 @@ Message_handler::Message_handler(conn) {
 
 }
 
-Message_handler void read() {
+Message_handler::void read() {
     char ch;
     ch = conn.read();
     switch (ch) {
