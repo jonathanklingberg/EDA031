@@ -13,7 +13,7 @@ Message_handler::void read() {
     ch = conn.read();
     switch (ch) {
         case COM_LIST_NG: // list newsgroups
-            
+            list_NGs();
             break;
         case COM_CREATE_NG: // create newsgroup
         
@@ -36,4 +36,9 @@ Message_handler::void read() {
         default:
             break;
     }
+}
+
+Message_handler::void list_NGs() {
+    
+    
 }
