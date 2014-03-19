@@ -72,7 +72,14 @@ int main() {
                 }
                 
             } else if(command == ns.get_article) {
-                
+                vector<string> v = ns.validate_input(parameters);
+                if(v.size() != 2) {
+                    cerr<<"Invalid input!"<<endl;
+                }
+                int id = stoi(v[0]);
+                int id2 = stoi(v[1]);
+                vector<string> res = cch.getArt(id,id2);
+                cout<< res[0]<<" "<<res[1]<<endl;
                 
             } else {
                 cout << "error, command does not exist"<<endl;
