@@ -47,7 +47,12 @@ public:
 	 * Adds new article in specified NewsGroup. Returns false
 	 * if newsgroup doesn't exists.
 	 */
-	 virtual bool removeArticle(const NewsGroup&, const Article&) = 0;	
+	 virtual bool removeArticle(const NewsGroup&, const Article&) = 0;
+	 
+	/*
+	 * Gets group at the specified index. Return a dick if not.
+	 */ 
+	 virtual NewsGroup groupAt(int i) = 0;
 };
 
 #endif
