@@ -16,18 +16,15 @@ Message_handler::void read() {
             list_NGs();
             break;
         case COM_CREATE_NG: // create newsgroup
-        
             break;
             
         case COM_LIST_ART: // list articles
             break;
             
-            
         case COM_CREATE_ART: // create article
             break;
             
         case COM_DELETE_ART: // delete article
-            
             break;
             
         case COM_GET_ART: //get article
