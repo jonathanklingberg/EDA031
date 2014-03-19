@@ -8,15 +8,14 @@ using namespace std;
 
 Newsclient::Newsclient(string hostname,int portnumber) : host(hostname),port(portnumber) {}
 
-Newsclient::bool validate_input(int& command,string& param) {
-    switch (command) {
-        case 1:
-            if(param == )
-            break;
-            
-        default:
-            break;
+Newsclient::vector<string> validate_input(string& param) {
+    vector<string> res;
+    for(auto i = param.begin(), i != param.end(); i = pos+1) {
+        auto pos = param.find(" ");
+        string s = param.substr(i,pos);
+        res.push_back(s);
     }
+    return res;
 }
 
 int main() {
@@ -48,13 +47,32 @@ int main() {
                 }
             } else if(command == ns.list_articles) {
                 int param = stoi(parameters);
-                map<int,string> arts = cch.listArt(param)
-                
+                map<int,string> arts = cch.listArt(param);
+                for(auto& a : arts) {
+                    cout << a.first<<" "<<a.second<<endl;
+                }
             } else if(command == ns.create_articles) {
+                vector<string> v = ns.validate_input(parameters);
+                if(v.size() != 4) {
+                    cerr << "invalid input"<<endl;
+                }
+                int id = stoi(v[0]);
+                if(cch.addArt(id,v[1],v[2],v[3]) == ERR_NG_DOES_NOT_EXIST) {
+                    cerr<< "newsgroup does not exist!"<<endl;
+                }
                 
             } else if(command == ns.delete_articles) {
+                vector<string> v = ns.validate_input(parameters);
+                if(v.size() != 2) {
+                    cerr << "invalid input"<<endl;
+                }
+                int id = stoi(v[0]);
+                if(cch.remArt(id,v[1]) == ERR_ART_DOES_NOT_EXIST) {
+                    cerr<<"Article does not exist!"<<endl;
+                }
                 
             } else if(command == ns.get_article) {
+                
                 
             } else {
                 cout << "error, command does not exist"<<endl;

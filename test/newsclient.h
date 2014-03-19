@@ -16,7 +16,7 @@ class Newsclient {
     
     vector<string> list_commands(){ return commandlist;}
     
-    bool valididate_input(int& command, string& param);
+    void valididate_input(int& command, string& param);
     
     const string instructions = "please see the commands below: write the command followed by white space and any paramaters on one line, end with carriage return";
     const string list = "list newsgroups";
