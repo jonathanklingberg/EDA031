@@ -42,7 +42,7 @@ int main(int argc, char* argv[]){
 				char c = mh.readByte();
                 switch (c) {
                     case COM_LIST_NG: // list newsgroups
-                        map<int, sting> groups = db.getGroups();
+                        map<int, sting> groups = db.listNgs();
                         ch.sendMap(groups);
                         break;
                     case COM_CREATE_NG: // create newsgroup
