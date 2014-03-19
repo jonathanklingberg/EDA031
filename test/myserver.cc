@@ -14,25 +14,26 @@ using namespace std;
 /*
  * Read an integer from a client.
  */
-int readNumber(const shared_ptr<Connection>& conn) {
-	unsigned char byte1 = conn->read();
-	unsigned char byte2 = conn->read();
-	unsigned char byte3 = conn->read();
-	unsigned char byte4 = conn->read();
-	return (byte1 << 24) | (byte2 << 16) | (byte3 << 8) | byte4;
-}
-
-/*
- * Send a string to a client.
- */
-void writeString(const shared_ptr<Connection>& conn, const string& s) {
-	for (char c : s) {
-		conn->write(c);
-	}
-	conn->write('$');
-}
+//int readNumber(const shared_ptr<Connection>& conn) {
+//	unsigned char byte1 = conn->read();
+//	unsigned char byte2 = conn->read();
+//	unsigned char byte3 = conn->read();
+//	unsigned char byte4 = conn->read();
+//	return (byte1 << 24) | (byte2 << 16) | (byte3 << 8) | byte4;
+//}
+//
+///*
+// * Send a string to a client.
+// */
+//void writeString(const shared_ptr<Connection>& conn, const string& s) {
+//	for (char c : s) {
+//		conn->write(c);
+//	}
+//	conn->write('$');
+//}
 
 int main(int argc, char* argv[]){
+
 	if (argc != 2) {
 		cerr << "Usage: myserver port-number" << endl;
 		exit(1);
@@ -54,17 +55,29 @@ int main(int argc, char* argv[]){
 	
 	while (true) {
 		auto conn = server.waitForActivity();
-		if (conn != nullptr) {
+
+		if (conn != nullptr) { // incoming message
+            Message_handler mh(conn);
+//            mh.handle();
 			try {
-				int nbr = readNumber(conn);
-				string result;
-				if (nbr > 0) {
-					result = "positive";
-				} else if (nbr == 0) {
-					result = "zero";
-				} else {
-					result = "negative";
-				}
+				int com = mh.readByte();
+//                mh.handle();
+//                db.handle(vec);
+                switch(com){
+                    case protocol::COM_LIST_NG:
+                        vector<sting> db.listGroup();
+                    default:
+                        
+                }
+                conn.read()
+//				string result;
+//				if (nbr > 0) {
+//					result = "positive";
+//				} else if (nbr == 0) {
+//					result = "zero";
+//				} else {
+//					result = "negative";
+//				}
 				writeString(conn, result);
 			} catch (ConnectionClosedException&) {
 				server.deregisterConnection(conn);

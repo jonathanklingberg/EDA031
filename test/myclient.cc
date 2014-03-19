@@ -2,6 +2,8 @@
 #include "connection.h"
 #include "connectionclosedexception.h"
 
+#include "message_handler.h"
+#include <vector>
 #include <iostream>
 #include <string>
 #include <stdexcept>
@@ -32,6 +34,8 @@ string readString(const Connection& conn) {
 }
 
 int main(int argc, char* argv[]) {
+    ostream_iterator<string> output(cout, " ");
+    
 	if (argc != 3) {
 		cerr << "Usage: myclient host-name port-number" << endl;
 		exit(1);
@@ -50,14 +54,17 @@ int main(int argc, char* argv[]) {
 		cerr << "Connection attempt failed" << endl;
 		exit(1);
 	}
+    Message_handler mh(conn);
 	
 	cout << "Type a number: ";
 	int nbr;
 	while (cin >> nbr) {
 		try {
 			cout << nbr << " is ...";
-			writeNumber(conn, nbr);
-			string reply = readString(conn);
+            vector<string> reply = mh.listGroup();
+//			writeNumber(conn, nbr);
+//			string reply = readString(conn);
+            copy(reply.begin(), reply.end(), output);
 			cout << " " << reply << endl;
 			cout << "Type another number: ";
 		} catch (ConnectionClosedException&) {

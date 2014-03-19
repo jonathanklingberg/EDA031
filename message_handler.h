@@ -1,7 +1,7 @@
 class Message_handler {
 
 public:
-	Message_handler(connection conn) : conn(conn) {};
+	Message_handler(Connection conn) : conn(conn) {};
 	void read();
 	void list_NGs();
     void create_NG();
@@ -12,5 +12,5 @@ public:
     
 private:
 	Connection conn;
-	
+    DatabaseManager dbm;
 	};
