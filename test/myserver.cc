@@ -11,27 +11,6 @@
 
 using namespace std;
 
-/*
- * Read an integer from a client.
- */
-//int readNumber(const shared_ptr<Connection>& conn) {
-//	unsigned char byte1 = conn->read();
-//	unsigned char byte2 = conn->read();
-//	unsigned char byte3 = conn->read();
-//	unsigned char byte4 = conn->read();
-//	return (byte1 << 24) | (byte2 << 16) | (byte3 << 8) | byte4;
-//}
-//
-///*
-// * Send a string to a client.
-// */
-//void writeString(const shared_ptr<Connection>& conn, const string& s) {
-//	for (char c : s) {
-//		conn->write(c);
-//	}
-//	conn->write('$');
-//}
-
 int main(int argc, char* argv[]){
 
 	if (argc != 2) {
@@ -57,19 +36,56 @@ int main(int argc, char* argv[]){
 		auto conn = server.waitForActivity();
 
 		if (conn != nullptr) { // incoming message
-            Message_handler mh(conn);
-//            mh.handle();
+            MessageHandler mh(conn);
+            CommandHandler ch(mh);
 			try {
-				int com = mh.readByte();
-//                mh.handle();
-//                db.handle(vec);
-                switch(com){
-                    case protocol::COM_LIST_NG:
-                        vector<sting> db.listGroup();
-                    default:
+				char c = mh.readByte();
+                switch (c) {
+                    case COM_LIST_NG: // list newsgroups
+                        map<int, sting> groups = db.getGroups();
+                        ch.sendMap(groups);
+                        break;
+                    case COM_CREATE_NG: // create newsgroup
+                        int groupId = mh.readByte();
+                        int res = db.addGroup(groupId);
+                        ch.sendAns(res);
+                        break;
+                    case COM_DELETE_NG : // deletes a specified newsgroup
+                        int groupId = mh.readByte();
+                        int res = db.getRem(groupId);
+                        ch.sendMap(res);
+                        break;
+                    case COM_LIST_ART: // list articles
+                        break;
                         
+                    case COM_CREATE_ART: // create article
+                        
+                        break;
+                        
+                    case COM_DELETE_ART: // delete article
+                        int artId = mh.readByte();
+                        int error = db.remArt(artId);
+                        ch.sendRem(error);
+                        break;
+                        
+                    case COM_GET_ART: //get article
+                        break;
+                    default:
+                        break;
                 }
-                conn.read()
+                
+//
+//                int addGroup(string name); // create a new newsgroup
+//                vector<string> listArt(int groupId); // list all articles to specific group
+//                int remArt(int groupIndex, int articleIndex); // remove a secific article
+//                vector<string> getArt(int groupId, int artId); // get a specific article
+//                int addArt(int groupIndex, string name, string author,
+//                           string text); // create new article
+                
+                
+                
+                conn.read();
+                
 //				string result;
 //				if (nbr > 0) {
 //					result = "positive";

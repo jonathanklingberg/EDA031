@@ -1,16 +1,12 @@
-class Message_handler {
+#include "Connection.h"
+
+class MessageHandler {
 
 public:
-	Message_handler(Connection conn) : conn(conn) {};
-	void read();
-	void list_NGs();
-    void create_NG();
-    void list_art();
-    void create_art();
-    void delete_art();
-    void get_art();
+	MessageHandler(Connection conn) : conn(conn) {};
+	void readByte();
+    void sendByte();
     
 private:
 	Connection conn;
-    DatabaseManager dbm;
-	};
+};
