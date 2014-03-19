@@ -1,0 +1,1 @@
+newsclient.o: newsclient.cc newsclient.h
