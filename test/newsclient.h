@@ -1,6 +1,7 @@
 #ifndef NEWSCLIENT_H
 #define NEWSCLIENT_H
 
+#include "clientcommandhandler.h"
 #include <string>
 #include <iostream>
 #include <vector>
@@ -15,6 +16,8 @@ class Newsclient {
     
     vector<string> list_commands(){ return commandlist;}
     
+    bool valididate_input(int& command, string& param);
+    
     const string instructions = "please see the commands below: write the command followed by white space and any paramaters on one line, end with carriage return";
     const string list = "list newsgroups";
     const string create_group = "create newsgroup";
@@ -28,11 +31,9 @@ class Newsclient {
     vector<string> commandlist = {instructions,list,create_group,delete_group,list_articles,create_articles,delete_articles,get_article};
     
 private:
-    
-    //Message_handler msghandler;
+    ClientCommandHandler cch;
     string host;
     int port;
-    
 };
 
 
