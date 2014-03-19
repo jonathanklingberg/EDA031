@@ -6,6 +6,7 @@
 #define DATABASE_INTERFACE_H
 
 #include <string>
+#include <vector>
 
 using NewsGroup = std::string;
 using Article = std::string;
@@ -29,30 +30,30 @@ public:
 	 * Lists all newsgroups. Returns array of newsgroups. If no newsgroups
 	 * exists an empty array is returned.
 	 */
-	virtual NewsGroup[] listNGs() = 0;
+	virtual std::vector<NewsGroup> listNGs() = 0;
 	
 	/*
 	 * Lists all articles in specified newsgroup. Returns array of newsgroups. 
 	 * If no newsgroups exists an empty array is returned.
 	 */
-	virtual Article[] listArticles(const NewsGroup&) = 0;
+	virtual std::vector<Article> listArticles(const NewsGroup&) = 0;
 	
 	/* 
 	 * Adds new article in specified NewsGroup. Returns false
 	 * if newsgroup doesn't exists.
 	 */
-	 virtual bool addArticle(const NewsGroup&, const Article&) = 0;
+	virtual bool addArticle(const NewsGroup&, const Article&) = 0;
 	 
 	/* 
 	 * Adds new article in specified NewsGroup. Returns false
 	 * if newsgroup doesn't exists.
 	 */
-	 virtual bool removeArticle(const NewsGroup&, const Article&) = 0;
+	virtual bool removeArticle(const NewsGroup&, const Article&) = 0;
 	 
 	/*
 	 * Gets group at the specified index. Return a dick if not.
 	 */ 
-	 virtual NewsGroup groupAt(int i) = 0;
+	virtual NewsGroup groupAt(int i) = 0;
 };
 
 #endif
