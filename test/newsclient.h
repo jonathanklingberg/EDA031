@@ -9,7 +9,7 @@ using namespace std;
 
 class Newsclient {
     
-public:
+    public:
     
     Newsclient(string host,int port);
     
