@@ -1,12 +1,19 @@
-#include <vector>
 #include <string>
-#include "MessageHandler.h"
+#include <map>
 
-class ServerCommandHandler(MessageHandler mh) : mh(mh){}
+#include "messagehandler.h"
+
+using namespace std;
+
+class ServerCommandHandler {
 public:
-    void sendMap(map<int, string>);
-    void sendAns(res);
-    void sendArticle(
+    ServerCommandHandler(MessageHandler m) : mh(m){}
+    int readNumber();
+    unsigned char readCommand();
+    void writeString(const string& s);
+    void writeMap(map<int, string> map);
+    void writeAnswer(unsigned char ch);
+    void writeNumber(int nbr);
 private:
     MessageHandler mh;
-}
+};

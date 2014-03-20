@@ -2,17 +2,19 @@
 #include "server.h"
 #include "connection.h"
 #include "connectionclosedexception.h"
+#include "servercommandhandler.h"
+#include "protocol.h"
 
 #include <memory>
 #include <iostream>
 #include <string>
 #include <stdexcept>
+#include <sstream>
 #include <cstdlib>
 
 using namespace std;
 
 int main(int argc, char* argv[]){
-
 	if (argc != 2) {
 		cerr << "Usage: myserver port-number" << endl;
 		exit(1);
@@ -34,67 +36,57 @@ int main(int argc, char* argv[]){
 	
 	while (true) {
 		auto conn = server.waitForActivity();
-
-		if (conn != nullptr) { // incoming message
-            MessageHandler mh(conn);
-            CommandHandler ch(mh);
+        MessageHandler smh(*conn.get());
+        ServerCommandHandler sch(smh);
+        // CREATE A DB HERE : Database db();
+		if (conn != nullptr) {
 			try {
-				char c = mh.readByte();
-                switch (c) {
-                    case COM_LIST_NG: // list newsgroups
-                        map<int, sting> groups = db.listNgs();
-                        ch.sendMap(groups);
-                        break;
-                    case COM_CREATE_NG: // create newsgroup
-                        int groupId = mh.readByte();
-                        int res = db.addGroup(groupId);
-                        ch.sendAns(res);
-                        break;
-                    case COM_DELETE_NG : // deletes a specified newsgroup
-                        int groupId = mh.readByte();
-                        int res = db.getRem(groupId);
-                        ch.sendMap(res);
-                        break;
-                    case COM_LIST_ART: // list articles
-                        break;
-                        
-                    case COM_CREATE_ART: // create article
-                        
-                        break;
-                        
-                    case COM_DELETE_ART: // delete article
-                        int artId = mh.readByte();
-                        int error = db.remArt(artId);
-                        ch.sendRem(error);
-                        break;
-                        
-                    case COM_GET_ART: //get article
-                        break;
-                    default:
-                        break;
+                unsigned char command = sch.readCommand();
+                cout << "Server received command: " << static_cast<unsigned>(command) << endl;
+                // DONT FORGET TO READ END COMMAND INSIDE SWITH_CASE
+                switch (command) {
+                    case Protocol::COM_LIST_NG: // list newsgroups
+                        cout << "inside the correct case" << endl;
+                        unsigned char end_command = sch.readCommand();
+                        cout << "And end_command: " << static_cast<unsigned>(end_command) << endl;
+                        // check endcommand...
+//                      map<int, sting> groups = db.listNgs();
+                        map<int, string> groups;
+                        groups.insert(make_pair(0,"C++ gruppen"));
+                        groups.insert(make_pair(1,"Java gruppen"));
+                        sch.writeAnswer(Protocol::ANS_LIST_NG);
+                        sch.writeMap(groups);
+                    break;
+//                            case Protocol::COM_CREATE_NG: // create newsgroup
+//                                int groupId = mh.readByte();
+//                                int res = db.addGroup(groupId);
+//                                sch.sendAns(res);
+//                                break;
+//                            case Protocol::COM_DELETE_NG : // deletes a specified newsgroup
+//                                int groupId = mh.readByte();
+//                                int res = db.getRem(groupId);
+//                                sch.sendMap(res);
+//                                break;
+//                            case Protocol::COM_LIST_ART: // list articles
+//                                break;
+//                                
+//                            case Protocol::COM_CREATE_ART: // create article
+//                                
+//                                break;
+//                                
+//                            case Protocol::COM_DELETE_ART: // delete article
+//                                int artId = mh.readByte();
+//                                int error = db.remArt(artId);
+//                                sch.sendRem(error);
+//                                break;
+//                                
+//                            case COM_GET_ART: //get article
+//                                break;
+//                            default:
+//                                break;
                 }
-                
-//
-//                int addGroup(string name); // create a new newsgroup
-//                vector<string> listArt(int groupId); // list all articles to specific group
-//                int remArt(int groupIndex, int articleIndex); // remove a secific article
-//                vector<string> getArt(int groupId, int artId); // get a specific article
-//                int addArt(int groupIndex, string name, string author,
-//                           string text); // create new article
-                
-                
-                
-                conn.read();
-                
-//				string result;
-//				if (nbr > 0) {
-//					result = "positive";
-//				} else if (nbr == 0) {
-//					result = "zero";
-//				} else {
-//					result = "negative";
-//				}
-				writeString(conn, result);
+                sch.writeAnswer(Protocol::ANS_END);
+
 			} catch (ConnectionClosedException&) {
 				server.deregisterConnection(conn);
 				cout << "Client closed connection" << endl;
