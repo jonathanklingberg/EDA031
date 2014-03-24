@@ -34,15 +34,17 @@ int main(int argc, char* argv[]) {
 	}
     MessageHandler mh(conn);
     ClientCommandHandler cch(mh);
-	cout << "Type a number: ";
-	int nbr;
+	cout << "Type a name of group you wish to create: ";
+	string name;
     // Test for listgroup
     // IMPLEMENT YOUR OWN CLI HERE!!
-	while (cin >> nbr) {
+	while (cin >> name) {
 		try {
-			cout << nbr << " is ...";
-            map<int, string> groups = cch.listGroups();
-			cout << "Type another number: ";
+			if(cch.createGroup(name)) {
+				cout << "group created" << endl;
+			}else{
+				cout << "group allready exists" << endl;
+				}
 		} catch (ConnectionClosedException&) {
 			cout << " no reply from server. Exiting." << endl;
 			exit(1);

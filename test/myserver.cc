@@ -42,26 +42,35 @@ int main(int argc, char* argv[]){
 		if (conn != nullptr) {
 			try {
                 unsigned char command = sch.readCommand();
+                unsigned char end_command;
+                map<int, string> groups;
                 cout << "Server received command: " << static_cast<unsigned>(command) << endl;
                 // DONT FORGET TO READ END COMMAND INSIDE SWITH_CASE
                 switch (command) {
                     case Protocol::COM_LIST_NG: // list newsgroups
                         cout << "inside the correct case" << endl;
-                        unsigned char end_command = sch.readCommand();
+                        end_command = sch.readCommand();
                         cout << "And end_command: " << static_cast<unsigned>(end_command) << endl;
                         // check endcommand...
-//                      map<int, sting> groups = db.listNgs();
-                        map<int, string> groups;
+//                      map<int, sting> groups = db.listNgs();               
                         groups.insert(make_pair(0,"C++ gruppen"));
                         groups.insert(make_pair(1,"Java gruppen"));
                         sch.writeAnswer(Protocol::ANS_LIST_NG);
                         sch.writeMap(groups);
                     break;
-//                            case Protocol::COM_CREATE_NG: // create newsgroup
-//                                int groupId = mh.readByte();
-//                                int res = db.addGroup(groupId);
-//                                sch.sendAns(res);
-//                                break;
+                    case Protocol::COM_CREATE_NG: // create newsgroup
+                    	string groupName = smh.readString();
+                    	//int res = db.addGroup(groupId);
+                    	end_command = sch.readCommand();
+                    	map<int, string> db;                      // fake db
+                    	db.insert(make_pair(0, groupName));
+                    	cout << "db atm: " << endl;
+    			for(auto it = db.cbegin(); it != db.cend(); ++it){
+        		std::cout << it->first << " " << it->second << "\n";
+    			}	
+                    	sch.writeAnswer(Protocol::ANS_CREATE_NG);
+                    	sch.writeAnswer(Protocol::ANS_ACK);		   // om namnet finns ska nak returneras
+                    break;
 //                            case Protocol::COM_DELETE_NG : // deletes a specified newsgroup
 //                                int groupId = mh.readByte();
 //                                int res = db.getRem(groupId);

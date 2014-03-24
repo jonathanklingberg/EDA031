@@ -5,13 +5,13 @@
 
 using namespace std;
 
-int ServerCommandHandler::readNumber(){
+int ServerCommandHandler::readNumber(){     //ska vi använda denna?
     return mh.readNumber();
 }
-unsigned char ServerCommandHandler::readCommand(){
+unsigned char ServerCommandHandler::readCommand(){     //ska vi använda denna?
     return mh.readCode();
 }
-void ServerCommandHandler::writeString(const string& s){
+void ServerCommandHandler::writeString(const string& s){      //ska vi använda denna?
     mh.writeString(s);
 }
 void ServerCommandHandler::writeMap(map<int, string> map){
@@ -24,9 +24,9 @@ void ServerCommandHandler::writeMap(map<int, string> map){
     }
 }
 
-void ServerCommandHandler::writeAnswer(unsigned char ch){
+void ServerCommandHandler::writeAnswer(unsigned char ch){       //ska vi använda denna?
     mh.writeCode(ch);
 }
-void ServerCommandHandler::writeNumber(int nbr){
+void ServerCommandHandler::writeNumber(int nbr){         ///ska vi använda denna?
     mh.writeNumber(nbr);
 }
