@@ -56,21 +56,23 @@ int main(int argc, char* argv[]){
                         groups.insert(make_pair(0,"C++ gruppen"));
                         groups.insert(make_pair(1,"Java gruppen"));
                         sch.writeAnswer(Protocol::ANS_LIST_NG);
+                       // sch.writeAnswer(Protocol::PAR_NUM);
+                        //sch.writeNumber(groups.size());
                         sch.writeMap(groups);
                     break;
-                    case Protocol::COM_CREATE_NG: // create newsgroup
-                    	string groupName = smh.readString();
-                    	//int res = db.addGroup(groupId);
-                    	end_command = sch.readCommand();
-                    	map<int, string> db;                      // fake db
-                    	db.insert(make_pair(0, groupName));
-                    	cout << "db atm: " << endl;
-    			for(auto it = db.cbegin(); it != db.cend(); ++it){
-        		std::cout << it->first << " " << it->second << "\n";
-    			}	
-                    	sch.writeAnswer(Protocol::ANS_CREATE_NG);
-                    	sch.writeAnswer(Protocol::ANS_ACK);		   // om namnet finns ska nak returneras
-                    break;
+//                    case Protocol::COM_CREATE_NG: // create newsgroup
+//                    	string groupName = smh.readString();
+//                    	//int res = db.addGroup(groupId);
+//                    	end_command = sch.readCommand();
+//                    	map<int, string> db;                      // fake db
+//                    	db.insert(make_pair(0, groupName));
+//                    	cout << "db atm: " << endl;
+//    			for(auto it = db.cbegin(); it != db.cend(); ++it){
+//        		std::cout << it->first << " " << it->second << "\n";
+//    			}	
+//                    	sch.writeAnswer(Protocol::ANS_CREATE_NG);
+//                    	sch.writeAnswer(Protocol::ANS_ACK);		   // om namnet finns ska nak returneras
+//                    break;
 //                            case Protocol::COM_DELETE_NG : // deletes a specified newsgroup
 //                                int groupId = mh.readByte();
 //                                int res = db.getRem(groupId);

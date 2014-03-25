@@ -11,8 +11,8 @@ void ClientCommandHandler::writeNumber(int nbr){      //Behövs förmodligen int
     mh.writeNumber(nbr);
 }
 
-string ClientCommandHandler::readString(){      //Behövs förmodligen inte
-    return mh.readString();
+string ClientCommandHandler::readString(int n){      //Behövs förmodligen inte
+    return mh.readString(n);
 }
 
 void ClientCommandHandler::writeCommand(unsigned char c){     //Behövs förmodligen inte
@@ -23,6 +23,7 @@ map<int, string> ClientCommandHandler::listGroups() {
     mh.writeCode(Protocol::COM_LIST_NG);
     mh.writeCode(Protocol::COM_END);
     unsigned char start_code = mh.readCode();
+    mh.readCode();
     int size = mh.readNumber();
     cout << "Client received start_code: " << static_cast<unsigned>(start_code) << endl;
     cout << "with size: " << size << endl;
@@ -30,7 +31,11 @@ map<int, string> ClientCommandHandler::listGroups() {
     //    checkCondition(nbrGroups >= 0, "List groups", "Number of groups < 0");
     map<int, string> groups;
     for (int i = 0; i < size; i++) {
-        groups.insert(make_pair(mh.readNumber(), mh.readString()));
+        mh.readCode();
+        int num = mh.readNumber();
+        mh.readCode();
+        int n = mh.readNumber();
+        groups.insert(make_pair(num, mh.readString(n)));
     }
     cout << "incoming map: " << endl;
     for(auto it = groups.cbegin(); it != groups.cend(); ++it){

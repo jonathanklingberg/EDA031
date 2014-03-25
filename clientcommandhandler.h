@@ -9,7 +9,7 @@ public:
     ClientCommandHandler(MessageHandler m) : mh(m){}
     void writeNumber(int nbr);
     void writeCommand(unsigned char c);
-    string readString();
+    string readString(int n);
     map<int, string> listGroups();
     bool createGroup(string title);
     //bool deleteGroup(string title);

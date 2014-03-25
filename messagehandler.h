@@ -12,7 +12,7 @@ public:
     MessageHandler(Connection& c) : conn(c) {};
 //    MessageHandler(shared_ptr<Connection>& c) : conn(c) {};
     void writeNumber(int value);
-    string readString();
+    string readString(int n);
     void writeString(const string& s);
     int readNumber();
     void writeByte(unsigned char ch);

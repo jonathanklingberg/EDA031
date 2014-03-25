@@ -1,5 +1,6 @@
 #include <string>
 #include <map>
+#include "protocol.h"
 
 #include "servercommandhandler.h"
 
@@ -15,10 +16,14 @@ void ServerCommandHandler::writeString(const string& s){      //ska vi använda 
     mh.writeString(s);
 }
 void ServerCommandHandler::writeMap(map<int, string> map){
+    mh.writeCode(Protocol::PAR_NUM);
     mh.writeNumber(map.size());
     auto beg = map.begin();
     while( beg != map.end()){
+        mh.writeCode(Protocol::PAR_NUM);
         mh.writeNumber( beg->first );
+        mh.writeCode(Protocol::PAR_STRING);
+        mh.writeNumber(beg->second.size());
         mh.writeString( beg->second );
         ++beg;
     }

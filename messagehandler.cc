@@ -11,20 +11,21 @@ void MessageHandler::writeNumber(int value){
     conn.write((value >> 8)	 & 0xFF);
     conn.write(value & 0xFF);
 }
-string MessageHandler::readString(){
+string MessageHandler::readString(int n){
     string s;
-    char ch;
-    while ((ch = conn.read()) != '$') {
+    char ch = 0;
+    for(int i = 0; i < n; ++i) {
+    //while ((ch = conn.read()) != '$') {
         s += ch;
     }
     return s;
 }
 
 void MessageHandler::writeString(const string& s) {
-	for (char c : s) {
+	for (unsigned char c : s) {
 		conn.write(c);
 	}
-	conn.write('$');
+	//conn.write('$');
 }
 
 int MessageHandler::readNumber() {
