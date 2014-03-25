@@ -15,7 +15,6 @@ string MessageHandler::readString(int n){
     string s;
     char ch = 0;
     for(int i = 0; i < n; ++i) {
-    //while ((ch = conn.read()) != '$') {
         s += ch;
     }
     return s;
@@ -25,7 +24,6 @@ void MessageHandler::writeString(const string& s) {
 	for (unsigned char c : s) {
 		conn.write(c);
 	}
-	//conn.write('$');
 }
 
 int MessageHandler::readNumber() {
@@ -37,11 +35,7 @@ int MessageHandler::readNumber() {
 }
 
 void MessageHandler::writeByte(unsigned char nbr){
-//    try{
         conn.write(nbr);
-//    }catch( exception e){
-//        throw e;
-//    }
 }
 
 unsigned char MessageHandler::readCode(){
@@ -49,11 +43,7 @@ unsigned char MessageHandler::readCode(){
 }
 
 unsigned char MessageHandler::readByte(){
-    unsigned char code = conn.read();
-//    if (code == Connection.CONNECTION_CLOSED) {
-//        throw new ConnectionClosedException();
-//    }
-    return code;
+    return conn.read();
 }
 
 void MessageHandler::writeCode(const unsigned char c) {

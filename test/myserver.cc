@@ -44,20 +44,14 @@ int main(int argc, char* argv[]){
                 unsigned char command = sch.readCommand();
                 unsigned char end_command;
                 map<int, string> groups;
-                cout << "Server received command: " << static_cast<unsigned>(command) << endl;
-                // DONT FORGET TO READ END COMMAND INSIDE SWITH_CASE
                 switch (command) {
                     case Protocol::COM_LIST_NG: // list newsgroups
-                        cout << "inside the correct case" << endl;
-                        end_command = sch.readCommand();
-                        cout << "And end_command: " << static_cast<unsigned>(end_command) << endl;
+                    end_command = sch.readCommand();
                         // check endcommand...
 //                      map<int, sting> groups = db.listNgs();               
                         groups.insert(make_pair(0,"C++ gruppen"));
                         groups.insert(make_pair(1,"Java gruppen"));
                         sch.writeAnswer(Protocol::ANS_LIST_NG);
-                       // sch.writeAnswer(Protocol::PAR_NUM);
-                        //sch.writeNumber(groups.size());
                         sch.writeMap(groups);
                     break;
 //                    case Protocol::COM_CREATE_NG: // create newsgroup

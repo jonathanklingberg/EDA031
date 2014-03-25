@@ -1,4 +1,3 @@
-/* myclient.cc: sample client program */
 #include "myclient.h"
 #include "protocol.h"
 
@@ -49,9 +48,8 @@ int main(int argc, char* argv[]) {
     
 	cout << "enter a command, type -h for help: ";
 	int nbr;
-    // Test for listgroup
-    // IMPLEMENT YOUR OWN CLI HERE!!
-    Myclient ns;
+  
+    Myclient ns; // creates a Myclient, used to check commands
     while(true) {
         string line;
         while(getline(cin,line)) {
@@ -124,22 +122,5 @@ int main(int argc, char* argv[]) {
             }
         }
     }
-
-	cout << "Type a name of group you wish to create: ";
-	string name;
-
-	while (cin >> name) {
-		try {
-			if(cch.createGroup(name)) {
-				cout << "group created" << endl;
-			}else{
-				cout << "group allready exists" << endl;
-				}
-		} catch (ConnectionClosedException&) {
-			cout << " no reply from server. Exiting." << endl;
-			exit(1);
-		}
-	}
-
 }
 
