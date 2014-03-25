@@ -15,9 +15,11 @@ Myclient::Myclient(){}
 
 vector<string> Myclient::validate_input(string& param) {
     vector<string> res;
-    for(auto i = param.begin(), i != param.end(); i = pos+1) {
+    int position;
+    for(auto i = param.begin(); i != param.end(); i += position) {
         auto pos = param.find(" ");
-        string s = param.substr(i,pos);
+        position = pos;
+        string s = param.substr(*i,pos);
         res.push_back(s);
     }
     return res;
@@ -44,6 +46,7 @@ int main(int argc, char* argv[]) {
 	}
     MessageHandler mh(conn);
     ClientCommandHandler cch(mh);
+    
 	cout << "enter a command, type -h for help: ";
 	int nbr;
     // Test for listgroup
@@ -66,50 +69,50 @@ int main(int argc, char* argv[]) {
                 for(auto& g : groups) {
                     cout << g.first<< " " << g.second<<endl;
                 }
-            } else if(command == ns.create_group) {
-                if(cch.addGroup(parameters) == Protocol::ERR_NG_ALREADY_EXISTS) {
-                    cerr << "newsgroup already exists!"<<endl;
-                }
-            } else if(command == ns.delete_group) {
-                int param = stoi(parameters);
-                if(cch.remGroup(param) == Protocol::ERR_NG_DOES_NOT_EXIST) {
-                    cerr << "newsgroup does not exist!" <<endl;
-                }
-            } else if(command == ns.list_articles) {
-                int param = stoi(parameters);
-                map<int,string> arts = cch.listArt(param);
-                for(auto& a : arts) {
-                    cout << a.first<<" "<<a.second<<endl;
-                }
-            } else if(command == ns.create_articles) {
-                vector<string> v = ns.validate_input(parameters);
-                if(v.size() != 4) {
-                    cerr << "invalid input"<<endl;
-                }
-                int id = stoi(v[0]);
-                if(cch.addArt(id,v[1],v[2],v[3]) == ERR_NG_DOES_NOT_EXIST) {
-                    cerr<< "newsgroup does not exist!"<<endl;
-                }
-                
-            } else if(command == ns.delete_articles) {
-                vector<string> v = ns.validate_input(parameters);
-                if(v.size() != 2) {
-                    cerr << "invalid input"<<endl;
-                }
-                int id = stoi(v[0]);
-                if(cch.remArt(id,v[1]) == ERR_ART_DOES_NOT_EXIST) {
-                    cerr<<"Article does not exist!"<<endl;
-                }
-                
-            } else if(command == ns.get_article) {
-                vector<string> v = ns.validate_input(parameters);
-                if(v.size() != 2) {
-                    cerr<<"Invalid input!"<<endl;
-                }
-                int id = stoi(v[0]);
-                int id2 = stoi(v[1]);
-                vector<string> res = cch.getArt(id,id2);
-                cout<< res[0]<<" "<<res[1]<<endl;
+//            } else if(command == ns.create_group) {
+//                if(cch.createGroup(parameters) == Protocol::ERR_NG_ALREADY_EXISTS) {
+//                    cerr << "newsgroup already exists!"<<endl;
+//                }
+//            } else if(command == ns.delete_group) {
+//                int param = stoi(parameters);
+//                if(cch.remGroup(param) == Protocol::ERR_NG_DOES_NOT_EXIST) {
+//                    cerr << "newsgroup does not exist!" <<endl;
+//                }
+//            } else if(command == ns.list_articles) {
+//                int param = stoi(parameters);
+//                map<int,string> arts = cch.listArt(param);
+//                for(auto& a : arts) {
+//                    cout << a.first<<" "<<a.second<<endl;
+//                }
+//            } else if(command == ns.create_articles) {
+//                vector<string> v = ns.validate_input(parameters);
+//                if(v.size() != 4) {
+//                    cerr << "invalid input"<<endl;
+//                }
+//                int id = stoi(v[0]);
+//                if(cch.addArt(id,v[1],v[2],v[3]) == ERR_NG_DOES_NOT_EXIST) {
+//                    cerr<< "newsgroup does not exist!"<<endl;
+//                }
+//                
+//            } else if(command == ns.delete_articles) {
+//                vector<string> v = ns.validate_input(parameters);
+//                if(v.size() != 2) {
+//                    cerr << "invalid input"<<endl;
+//                }
+//                int id = stoi(v[0]);
+//                if(cch.remArt(id,v[1]) == ERR_ART_DOES_NOT_EXIST) {
+//                    cerr<<"Article does not exist!"<<endl;
+//                }
+//                
+//            } else if(command == ns.get_article) {
+//                vector<string> v = ns.validate_input(parameters);
+//                if(v.size() != 2) {
+//                    cerr<<"Invalid input!"<<endl;
+//                }
+//                int id = stoi(v[0]);
+//                int id2 = stoi(v[1]);
+//                vector<string> res = cch.getArt(id,id2);
+//                cout<< res[0]<<" "<<res[1]<<endl;
                 
             } else {
                 cout << "error, command does not exist"<<endl;
@@ -121,15 +124,22 @@ int main(int argc, char* argv[]) {
             }
         }
     }
-//	while (cin >> nbr) {
-//		try {
-//			cout << nbr << " is ...";
-//            map<int, string> groups = cch.listGroups();
-//			cout << "Type another number: ";
-//		} catch (ConnectionClosedException&) {
-//			cout << " no reply from server. Exiting." << endl;
-//			exit(1);
-//		}
-//	}
+
+	cout << "Type a name of group you wish to create: ";
+	string name;
+
+	while (cin >> name) {
+		try {
+			if(cch.createGroup(name)) {
+				cout << "group created" << endl;
+			}else{
+				cout << "group allready exists" << endl;
+				}
+		} catch (ConnectionClosedException&) {
+			cout << " no reply from server. Exiting." << endl;
+			exit(1);
+		}
+	}
+
 }
 
