@@ -10,7 +10,6 @@
 
 using namespace std;
 
-Myclient::Myclient(){}
 
 vector<string> Myclient::validate_input(string& param) {
     vector<string> res;
@@ -47,7 +46,6 @@ int main(int argc, char* argv[]) {
     ClientCommandHandler cch(mh);
     
 	cout << "enter a command, type -h for help: ";
-	int nbr;
   
     Myclient ns; // creates a Myclient, used to check commands
     while(true) {
@@ -63,6 +61,7 @@ int main(int argc, char* argv[]) {
                     cout << com <<endl;
                 }
             } else if(command == ns.list) {
+                cout << "HEJ FÖR FAN!"<<endl;
                 map<int,string> groups = cch.listGroups();
                 for(auto& g : groups) {
                     cout << g.first<< " " << g.second<<endl;
