@@ -40,26 +40,31 @@ map<int, string> ClientCommandHandler::listGroups() {
     return groups;
 }
 
-//bool ClientCommandHandler::createGroup(string title) {
-//	mh.writeCode(Protocol::COM_CREATE_NG);
-//	mh.writeString(title);
-//	mh.writeNumber(Protocol::COM_END);
-//	unsigned char start_code = mh.readCode();  //ANS_CREATE_NG	
-//	unsigned char acknowlagement_code = mh.readCode();   //Antingen ANS_ACK eller ANS_NAK
-//	unsigned char end_code;
-//	unsigned char nak_answer_code;
-//	switch(acknowlagement_code) {
-//		case Protocol::ANS_ACK:
-//			end_code = mh.readCode();
-//			return true;
-//		case Protocol::ANS_NAK:
-//			nak_answer_code = mh.readCode();
-//		        end_code = mh.readCode();
-//			return false;
-//		default :
-//			return false;
-//		}
-//}
+bool ClientCommandHandler::createGroup(string title) {
+	writeCommand(Protocol::COM_CREATE_NG);
+	writeCommand(Protocol::PAR_STRING);
+	writeNumber(title.size());
+	mh.writeString(title);
+	writeNumber(Protocol::COM_END);
+	unsigned char start_code = mh.readCode();  //ANS_CREATE_NG	
+	unsigned char acknowlagement_code = mh.readCode();   //Antingen ANS_ACK eller ANS_NAK
+	unsigned char end_code;
+	unsigned char nak_answer_code;
+	switch(acknowlagement_code) {
+		case Protocol::ANS_ACK:
+			end_code = mh.readCode();
+			return true;
+		case Protocol::ANS_NAK:
+			nak_answer_code = mh.readCode();
+			if(nak_answer_code == Protocol::ERR_NG_ALREADY_EXISTS) {
+				cout << "ERR_NG_DOES_ALLReADY_eXIST" << endl;
+			}
+		        end_code = mh.readCode();
+			return false;
+		default :
+			return false;
+		}
+}
 
 /*
 bool ClientCommandHandler::deleteGroup(string title) {   // ej klar
