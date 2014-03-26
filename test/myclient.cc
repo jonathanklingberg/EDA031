@@ -66,15 +66,15 @@ int main(int argc, char* argv[]) {
                 for(auto& g : groups) {
                     cout << g.first<< " " << g.second<<endl;
                 }
-//            } else if(command == ns.create_group) {
-//                if(cch.createGroup(parameters) == Protocol::ERR_NG_ALREADY_EXISTS) {
-//                    cerr << "newsgroup already exists!"<<endl;
-//                }
-//            } else if(command == ns.delete_group) {
-//                int param = stoi(parameters);
-//                if(cch.remGroup(param) == Protocol::ERR_NG_DOES_NOT_EXIST) {
-//                    cerr << "newsgroup does not exist!" <<endl;
-//                }
+            } else if(command == ns.create_group) {
+                if(cch.createGroup(parameters) == false) {
+                    cerr << "newsgroup already exists!"<<endl;
+                }
+            } else if(command == ns.delete_group) {
+                int param = stoi(parameters);
+                if(cch.deleteGroup(param) == false) {
+                    cerr << "newsgroup does not exist!" <<endl;
+                }
 //            } else if(command == ns.list_articles) {
 //                int param = stoi(parameters);
 //                map<int,string> arts = cch.listArt(param);

@@ -90,6 +90,7 @@ int main(int argc, char* argv[]){
                         }
                         break;
                     case Protocol::COM_LIST_ART: // list articles
+                        
                         break;
                         
                     case Protocol::COM_CREATE_ART: // create article

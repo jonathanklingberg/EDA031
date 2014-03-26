@@ -70,11 +70,11 @@ bool ClientCommandHandler::createGroup(string title) {
 }
 
 
-bool ClientCommandHandler::deleteGroup(int group_nbr) {   // ej klar
+bool ClientCommandHandler::deleteGroup(int group_nbr) {
 	writeCommand(Protocol::COM_DELETE_NG);
 	writeCommand(Protocol::PAR_NUM);
     writeNumber(group_nbr);
-	writeNumber(Protocol::COM_END);
+	writeCommand(Protocol::COM_END);
 	unsigned char start_code = mh.readCode();  //ANS_CREATE_NG	
 	unsigned char acknowledgement_code = mh.readCode();   //Antingen ANS_ACK eller ANS_NAK
     unsigned char end_code;
@@ -95,5 +95,40 @@ bool ClientCommandHandler::deleteGroup(int group_nbr) {   // ej klar
     }
 }
 
+map<int, string> ClientCommandHandler::listArts(int group_nbr) {
+    writeCommand(Protocol::COM_LIST_ART);
+    writeCommand(Protocol::PAR_NUM);
+    writeNumber(group_nbr);
+    writeCommand(Protocol::COM_END);
+    unsigned char start_code = mh.readCode(); //ANS_LIST_ART
+    unsigned char acknowledgement_code = mh.readCode();   //Antingen ANS_ACK eller ANS_NAK
+    unsigned char end_code;
+    unsigned char nak_answer_code;
+    switch(acknowledgement_code) {
+		case Protocol::ANS_ACK :
+            mh.readCode(); //PAR_NUM
+            int size = mh.readNumber(); // size of map
+            map<int,string> res;
+            for(int i = 0; i != size; ++i) {
+                mh.readCode(); //read PAR_NUM
+                int num = mh.readNumber(); //N
+                mh.readCode(); //read PAR_STRING
+                int n = mh.readNumber(); //N
+                res.insert(make_pair(num, mh.readString(n)));
+            }
+            end_code = mh.readCode();
+            case Protocol::ANS_NAK :
+			nak_answer_code = mh.readCode();
+            if(nak_answer_code == Protocol::ERR_NG_DOES_NOT_EXIST) {
+				cout << "The group does not exist!" << endl;
+			}
+			end_code = mh.readCode();
+			return false;
+        default :
+            return false;
+    }
+    return res;
+    
+}
 
 

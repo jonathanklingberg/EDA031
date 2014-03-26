@@ -14,6 +14,7 @@ public:
     map<int, string> listGroups();
     bool createGroup(string title);
     bool deleteGroup(int group_nbr);
+    map<int, string> listArts(int group_nbr);
 private:
     MessageHandler mh;
 };
