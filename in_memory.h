@@ -5,7 +5,7 @@
 #include <vector>
 #include "database_interface.h"
 
-class InMemory {
+class InMemory : public DatabaseInterface {
 public:
 	bool createNG(const NewsGroup&);
 	bool removeNG(const NewsGroup&);
