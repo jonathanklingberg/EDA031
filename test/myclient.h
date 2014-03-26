@@ -16,7 +16,7 @@ class Myclient {
     
 public:
     
-    Myclient();
+    Myclient(){};
     
     vector<string> list_commands(){ return commandlist;}
     
@@ -33,11 +33,6 @@ public:
     const string help = "-h";
     
     vector<string> commandlist = {instructions,list,create_group,delete_group,list_articles,create_articles,delete_articles,get_article};
-    
-private:
-//    ClientCommandHandler cch;
-    string host;
-    int port;
 };
 
 
