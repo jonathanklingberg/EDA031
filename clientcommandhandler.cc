@@ -18,6 +18,9 @@ string ClientCommandHandler::readString(int n){
 void ClientCommandHandler::writeCommand(unsigned char c){
     mh.writeCode(c);
 }
+void ClientCommandHandler::writeString(string s){
+    mh.writeString(s);
+}
 
 map<int, string> ClientCommandHandler::listGroups() {
     writeCommand(Protocol::COM_LIST_NG);
@@ -44,46 +47,53 @@ bool ClientCommandHandler::createGroup(string title) {
 	writeCommand(Protocol::COM_CREATE_NG);
 	writeCommand(Protocol::PAR_STRING);
 	writeNumber(title.size());
-	mh.writeString(title);
-	writeNumber(Protocol::COM_END);
+    writeString(title);
+	writeCommand(Protocol::COM_END);
 	unsigned char start_code = mh.readCode();  //ANS_CREATE_NG	
-	unsigned char acknowlagement_code = mh.readCode();   //Antingen ANS_ACK eller ANS_NAK
+	unsigned char acknowledgement_code = mh.readCode();   //Antingen ANS_ACK eller ANS_NAK
 	unsigned char end_code;
 	unsigned char nak_answer_code;
-	switch(acknowlagement_code) {
+	switch(acknowledgement_code) {
 		case Protocol::ANS_ACK:
 			end_code = mh.readCode();
 			return true;
 		case Protocol::ANS_NAK:
 			nak_answer_code = mh.readCode();
 			if(nak_answer_code == Protocol::ERR_NG_ALREADY_EXISTS) {
-				cout << "ERR_NG_DOES_ALLReADY_eXIST" << endl;
+				cout << "Group already exists!" << endl;
 			}
 		        end_code = mh.readCode();
 			return false;
-		default :
-			return false;
-		}
+        default :
+            return false;
+    }
 }
 
-/*
-bool ClientCommandHandler::deleteGroup(string title) {   // ej klar
-	mh.writeCode(Protocol::COM:DELETE_NG);
-	mh.writeString(title);
-	mh.writeNumber(Protocol::COM_END);
+
+bool ClientCommandHandler::deleteGroup(int group_nbr) {   // ej klar
+	writeCommand(Protocol::COM_DELETE_NG);
+	writeCommand(Protocol::PAR_NUM);
+    writeNumber(group_nbr);
+	writeNumber(Protocol::COM_END);
 	unsigned char start_code = mh.readCode();  //ANS_CREATE_NG	
-	unsigned char acknowlagement_code = mh.readCode();   //Antingen ANS_ACK eller ANS_NAK
-	switch(acknowlagement_code) {
-		case (Protocol::ANS_ACK) :
-			unsigned char end_code = mh.readCode();
+	unsigned char acknowledgement_code = mh.readCode();   //Antingen ANS_ACK eller ANS_NAK
+    unsigned char end_code;
+    unsigned char nak_answer_code;
+	switch(acknowledgement_code) {
+		case Protocol::ANS_ACK :
+			end_code = mh.readCode();
 			return true;
-		case (Protocol::ANS_NAK) :
-			unsigned char nak_answer_code = mh.readCode();
-			unsigned char end_code = mh.readCode();
+		case Protocol::ANS_NAK :
+			nak_answer_code = mh.readCode();
+            if(nak_answer_code == Protocol::ERR_NG_DOES_NOT_EXIST) {
+				cout << "The group does not exist!" << endl;
+			}
+			end_code = mh.readCode();
 			return false;
-		}
+        default :
+            return false;
+    }
 }
-*/
 
 
 
