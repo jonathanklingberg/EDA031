@@ -89,24 +89,24 @@ int main(int argc, char* argv[]){
                             sch.writeAnswer(Protocol::ERR_NG_DOES_NOT_EXIST);
                         }
                         break;
-//                    case Protocol::COM_LIST_ART: // list articles
-//                        
-//                        break;
-//                        
-//                    case Protocol::COM_CREATE_ART: // create article
-//                        
-//                        break;
-//                        
-//                    case Protocol::COM_DELETE_ART: // delete article
-//                        int artId = mh.readByte();
-//                        int error = db.remArt(artId);
-//                        sch.sendRem(error);
-//                        break;
-//                        
-//                    case COM_GET_ART: //get article
-//                        break;
-//                    default:
-//                        break;
+                    case Protocol::COM_LIST_ART: // list articles
+                        
+                        break;
+                        
+                    case Protocol::COM_CREATE_ART: // create article
+                        
+                        break;
+                        
+                    case Protocol::COM_DELETE_ART: // delete article
+                        int artId = mh.readByte();
+                        int error = db.remArt(artId);
+                        sch.sendRem(error);
+                        break;
+                        
+                    case COM_GET_ART: //get article
+                        break;
+                    default:
+                        break;
                 }
                 sch.writeAnswer(Protocol::ANS_END);
                 
