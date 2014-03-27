@@ -44,12 +44,13 @@ bool InMemory::removeArticle(const NewsGroup& ng, const Article& art) {
 }
 	
 NewsGroup InMemory::groupAt(int id) const {
+	NewsGroup ng;
 	for (unsigned i = 0; i < news_groups.size(); ++i) {
-		if (news_groups.at(i).getId()) {
-		
+		if (news_groups.at(i).getId() == id) {
+			ng = news_groups.at(i);
 		}
 	}
-	return -1;
+	return ng;
 }
 	
 	

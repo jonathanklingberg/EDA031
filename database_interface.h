@@ -51,7 +51,7 @@ public:
 	virtual bool removeArticle(const NewsGroup& ng, const Article& art) = 0;
 	 
 	/*
-	 * Gets group with the specified id. Return a -1 if not exist.
+	 * Gets group with the specified id. Return a ng with id set to -1 if not exist.
 	 */ 
 	virtual NewsGroup groupAt(int i) = 0;
 };
