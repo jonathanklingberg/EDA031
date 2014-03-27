@@ -3,6 +3,7 @@
 
 #include "article.h"
 #include "newsgroup.h"
+#include "in_memory.h"
 
 using namespace std;
 

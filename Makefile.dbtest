@@ -23,7 +23,7 @@ PROGS = db_test
 all: $(PROGS)
 
 # Targets rely on implicit rules for compiling and linking
-db_test: db_test.o article.o newsgroup.o
+db_test: db_test.o article.o newsgroup.o in_memory.o
 
 # Phony targets
 .PHONY: all clean
