@@ -1,6 +1,5 @@
 #include "myclient.h"
 #include "protocol.h"
-
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -75,41 +74,41 @@ int main(int argc, char* argv[]) {
                 if(cch.deleteGroup(param) == false) {
                     cerr << "newsgroup does not exist!" <<endl;
                 }
-//            } else if(command == ns.list_articles) {
-//                int param = stoi(parameters);
-//                map<int,string> arts = cch.listArt(param);
-//                for(auto& a : arts) {
-//                    cout << a.first<<" "<<a.second<<endl;
-//                }
-//            } else if(command == ns.create_articles) {
-//                vector<string> v = ns.validate_input(parameters);
-//                if(v.size() != 4) {
-//                    cerr << "invalid input"<<endl;
-//                }
-//                int id = stoi(v[0]);
-//                if(cch.addArt(id,v[1],v[2],v[3]) == ERR_NG_DOES_NOT_EXIST) {
-//                    cerr<< "newsgroup does not exist!"<<endl;
-//                }
-//                
-//            } else if(command == ns.delete_articles) {
-//                vector<string> v = ns.validate_input(parameters);
-//                if(v.size() != 2) {
-//                    cerr << "invalid input"<<endl;
-//                }
-//                int id = stoi(v[0]);
-//                if(cch.remArt(id,v[1]) == ERR_ART_DOES_NOT_EXIST) {
-//                    cerr<<"Article does not exist!"<<endl;
-//                }
-//                
-//            } else if(command == ns.get_article) {
-//                vector<string> v = ns.validate_input(parameters);
-//                if(v.size() != 2) {
-//                    cerr<<"Invalid input!"<<endl;
-//                }
-//                int id = stoi(v[0]);
-//                int id2 = stoi(v[1]);
-//                vector<string> res = cch.getArt(id,id2);
-//                cout<< res[0]<<" "<<res[1]<<endl;
+            } else if(command == ns.list_articles) {
+                int param = stoi(parameters);
+                map<int,string> arts = cch.listArt(param);
+                for(auto& a : arts) {
+                    cout << a.first<<" "<<a.second<<endl;
+                }
+            } else if(command == ns.create_articles) {
+                vector<string> v = ns.validate_input(parameters);
+                if(v.size() != 4) {
+                    cerr << "invalid input"<<endl;
+                }
+                int id = stoi(v[0]);
+                if(cch.addArt(id,v[1],v[2],v[3]) == ERR_NG_DOES_NOT_EXIST) {
+                    cerr<< "newsgroup does not exist!"<<endl;
+                }
+                
+            } else if(command == ns.delete_articles) {
+                vector<string> v = ns.validate_input(parameters);
+                if(v.size() != 2) {
+                    cerr << "invalid input"<<endl;
+                }
+                int id = stoi(v[0]);
+                if(cch.remArt(id,v[1]) == ERR_ART_DOES_NOT_EXIST) {
+                    cerr<<"Article does not exist!"<<endl;
+                }
+                
+            } else if(command == ns.get_article) {
+                vector<string> v = ns.validate_input(parameters);
+                if(v.size() != 2) {
+                    cerr<<"Invalid input!"<<endl;
+                }
+                int id = stoi(v[0]);
+                int id2 = stoi(v[1]);
+                vector<string> res = cch.getArt(id,id2);
+                cout<< res[0]<<" "<<res[1]<<endl;
                 
             } else {
                 cout << "error, command does not exist"<<endl;
