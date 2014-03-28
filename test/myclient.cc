@@ -9,7 +9,6 @@
 
 using namespace std;
 
-
 vector<string> Myclient::validate_input(string& param) {
     vector<string> res;
     int position;
@@ -60,7 +59,6 @@ int main(int argc, char* argv[]) {
                     cout << com <<endl;
                 }
             } else if(command == ns.list) {
-                cout << "HEJ FÖR FAN!"<<endl;
                 map<int,string> groups = cch.listGroups();
                 for(auto& g : groups) {
                     cout << g.first<< " " << g.second<<endl;
@@ -86,7 +84,7 @@ int main(int argc, char* argv[]) {
                     cerr << "invalid input"<<endl;
                 }
                 int id = stoi(v[0]);
-                if(cch.addArt(id,v[1],v[2],v[3]) == ERR_NG_DOES_NOT_EXIST) {
+                if(cch.createArt(id,v[1],v[2],v[3]) == false) {
                     cerr<< "newsgroup does not exist!"<<endl;
                 }
                 
@@ -96,7 +94,7 @@ int main(int argc, char* argv[]) {
                     cerr << "invalid input"<<endl;
                 }
                 int id = stoi(v[0]);
-                if(cch.remArt(id,v[1]) == ERR_ART_DOES_NOT_EXIST) {
+                if(cch.deleteArt(id,v[1]) == bool) {
                     cerr<<"Article does not exist!"<<endl;
                 }
                 
