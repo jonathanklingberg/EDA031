@@ -39,8 +39,13 @@ bool InMemory::addArticle(const NewsGroup& ng, const Article& art) {
 	
 }
 	
-bool InMemory::removeArticle(const NewsGroup& ng, const Article& art) {
-	
+bool InMemory::removeArticle(const NewsGroup& news_group, const Article& art) {
+	for (unsigned i = 0; i < news_groups.size(); ++i) {
+		if (news_group.getId() == news_groups.at(i)) {
+			NewsGroup &ng = news_groups.at(i);
+			for ()
+		}
+	}
 }
 	
 NewsGroup InMemory::groupAt(int id) const {
