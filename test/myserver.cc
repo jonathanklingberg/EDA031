@@ -75,15 +75,14 @@ int main(int argc, char* argv[]){
                     	groupName = smh.readString(namesize);
                     	//int res = db.addGroup(groupId);
                     	end_command = sch.readCommand();
-                    	db->createNG(groupName);
+                    	//db->createNG(groupName);
                         sch.writeAnswer(Protocol::ANS_CREATE_NG);
-                        auto it = find_if((newsgroups.begin()), newsgroups.end(), [&groupName](NewsGroup ng){ return ng.getTitle() != groupName;});
-                        if(it != newsgroups.end()) {
+                        //auto it = find_if((newsgroups.begin()), newsgroups.end(), [&groupName](NewsGroup ng){ return ng.getTitle() != groupName;});
+                        if(db->createNG(groupName)) {
+                            sch.writeAnswer(Protocol::ANS_ACK);
+                        }else{
                             sch.writeAnswer(Protocol::ANS_NAK);
                             sch.writeAnswer(Protocol::ERR_NG_ALREADY_EXISTS);
-                        }else{
-                            db->createNG(groupName);
-                            sch.writeAnswer(Protocol::ANS_ACK);
                         }
                     }
                         break;
