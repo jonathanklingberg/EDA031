@@ -40,10 +40,10 @@ int main(int argc, char* argv[]){
 	}
 	
 	while (true) {
-	auto conn = server.waitForActivity();
+        auto conn = server.waitForActivity();
         MessageHandler smh(*conn.get());
         ServerCommandHandler sch(smh);
-        DatabaseInterface db;  // CREATE A DB HERE : Database db();
+        InMemory::InMemory db;  // CREATE A DB HERE : Database db();
 		if (conn != nullptr) {
 			try {
                 unsigned char command = sch.readCommand();
@@ -59,7 +59,7 @@ int main(int argc, char* argv[]){
                 switch (command) {
                     case Protocol::COM_LIST_NG: // list newsgroups
                         end_command = sch.readCommand();
-                        for(size_t i; i < newsgroups.size(); ++i) {                        	
+                        for(size_t i; i < newsgroups.size(); ++i) {
                         	groups.insert(make_pair(newsgroups[i].getId(), newsgroups[i].getTitle()));
                         }
                         sch.writeAnswer(Protocol::ANS_LIST_NG);
@@ -71,16 +71,17 @@ int main(int argc, char* argv[]){
                     	namesize = sch.readNumber();
                     	string groupName = smh.readString(namesize);
                     	//int res = db.addGroup(groupId);
-                    	end_command = sch.readCommand();                  
+                    	end_command = sch.readCommand();
                     	db.createNG(groupName);
                         sch.writeAnswer(Protocol::ANS_CREATE_NG);
-                        if (find_if((newsgroups.begin()), newsgroups.end(), [&groupName](NewsGroup ng)->bool{ return ng.getTitle() != groupName;}) {  //lambda
-                            Newsgroup ng(groupName);
+                        auto it = find_if((newsgroups.begin()), newsgroups.end(), [&groupName](NewsGroup ng){ return ng.getTitle() != groupName;});
+                        if(it != newsgroups.end()) {
+                            sch.writeAnswer(Protocol::ANS_NAK);
+                            sch.writeAnswer(Protocol::ERR_NG_ALREADY_EXISTS);
+                        }else{
+                            NewsGroup ng(groupName);
                             db.createNG(ng);
                             sch.writeAnswer(Protocol::ANS_ACK);
-                        }else{
-                        sch.writeAnswer(Protocol::ANS_NAK);
-                        sch.writeAnswer(Protocol::ERR_NG_ALREADY_EXISTS);
                         }
                         break;
                         
@@ -104,18 +105,19 @@ int main(int argc, char* argv[]){
                         sch.readCommand(); //COM_END
                         
                         sch.writeAnswer(Protocol::ANS_LIST_ART);
-                            if(find_if(newsgroups.begin(), newsgroups.end(), [&groupId](NewsGroup ng)->bool{ return ng.getId() == groupId;}) {
-                            sch.writeAnswer(Protocol::ANS_ACK);	
+                        auto it2 = find_if((newsgroups.begin()), newsgroups.end(), [&groupId](NewsGroup ng){ return ng.getId() == groupId;});
+                        if(it2 != newsgroups.end()) {
+                            sch.writeAnswer(Protocol::ANS_ACK);
                             vector<Article> articles = db.listArticles(groupId);
                             sch.writeAnswer(Protocol::PAR_NUM);
                             sch.writeNumber(articles.size());                 //Antal artiklar
                             for(size_t i = 0; i < articles.size(); ++i) {
-                            	sch.writeAnswer(Protocol::PAR_NUM);
-                            	sch.writeNumber(articles[i].getId());
-                            	sch.writeAnswer(Protocol::PAR_STRING);
-                            	sch.writeNumber(articles[i].getTitle().size());
-                            	sch.writeString(articles[i].getTitle());
-                            }         
+                                sch.writeAnswer(Protocol::PAR_NUM);
+                                sch.writeNumber(articles[i].getId());
+                                sch.writeAnswer(Protocol::PAR_STRING);
+                                sch.writeNumber(articles[i].getTitle().size());
+                                sch.writeString(articles[i].getTitle());
+                            }
                         }else{
                             sch.writeAnswer(Protocol::ANS_NAK);
                             sch.writeAnswer(Protocol::ERR_NG_DOES_NOT_EXIST);
@@ -123,80 +125,81 @@ int main(int argc, char* argv[]){
                         break;
                         
                     case Protocol::COM_CREATE_ART: // create article
-                        	sch.readCommand();   // PAR_NUM
-                        	groupId = sch.readNumber();   // N 
-                        	sch.readCommand(); // PAR_STRING
-                        	titlesize = sch.readNumber();  
-                        	string title = smh.readString(titlesize);   // läser in titel
-                        	sch.readCommand();
-                        	authorsize = sch.readNumber();
-                        	string author = smh.readString(authorsize);
-                        	sch.readCommand();
-                        	textsize = sch.readNumber();
-                        	string text = smh.readString(textsize);
-                        	Article art(title, author, text);
-                        	sch.readCommand(); // COM_END
-                        	sch.writeAnswer(Protocol::ANS_CREATE_ART);
-                        	if(db.addArticle(groupId, art){               // Anropa databas metod
-                            		sch.writeAnswer(Protocol::ANS_ACK);
-                       	 	}else{
-                            		sch.writeAnswer(Protocol::ANS_NAK);
-                            		sch.writeAnswer(Protocol::ERR_NG_DOES_NOT_EXIST);
-                        	}                        	                       	                       	
-                        break;
-                        
-                    case Protocol::COM_DELETE_ART: // delete article
-                        	sch.readCommand(); // PAR_NUM
-                        	groupId = sch.readNumber();
-                               sch.readCommand(); // PAR_NUM
-                        	int artId = sch.readNumber();
-                        	sch.readCommand(); // COM_END
-                        	sch.writeAnswer(Protocol::ANS_DELETE_ART);
-                        	if(db.removeArticle(groupId, artId)) {
-                        		sch.writeAnswer(Protocol::ANS_ACK);
-                        	}else{
-                        		sch.writeAnswer(Protocol::ANS_NAK);
-                        		sch.writeAnswer(Protocol::ERR_NG_DOES_NOT_EXIST);
-                        	}			
-                        break;
-                        
-                               case Protocol::COM_GET_ART: //get article
-                    	sch.readCommand(); // PAR_NUM
-                        groupId = sch.readNumber();
-                        sch.readCommand(); // PAR_NUM
-                        artId = sch.readNumber();
+                        sch.readCommand();   // PAR_NUM
+                        groupId = sch.readNumber();   // N
+                        sch.readCommand(); // PAR_STRING
+                        titlesize = sch.readNumber();
+                        string title = smh.readString(titlesize);   // läser in titel
+                        sch.readCommand();
+                        authorsize = sch.readNumber();
+                        string author = smh.readString(authorsize);
+                        sch.readCommand();
+                        textsize = sch.readNumber();
+                        string text = smh.readString(textsize);
+                        Article art(title, author, text);
                         sch.readCommand(); // COM_END
-                        sch.writeAnswer(Protocol::ANS_GET_ART);
-                        artlist = db.listArticles(groupId);
-                               if(find_if(artlist.begin(), artlist.end(), [&artId](Article art)->bool{ return art.getId() == artId;}) {
-                        	sch.writeAnswer(Protocol::ANS_ACK);
-                        	sch.writeAnswer(Protocol::PAR_STRING); // PAR_STRING
-                        	sch.writeNumber(art.getTitle().size());
-                        	smh.writeString(art.getTitle());
-                        	sch.writeAnswer(Protocol::PAR_STRING); // PAR_STRING
-                        	sch.writeNumber(art.getAuthor().size());
-                        	smh.writeString(art.getAuthor());
-                        	sch.writeAnswer(Protocol::PAR_STRING); // PAR_STRING
-                        	sch.writeNumber(art.getText().size());
-                        	smh.writeString(art.getText());
+                        sch.writeAnswer(Protocol::ANS_CREATE_ART);
+                        if(db.addArticle(groupId, art){               // Anropa databas metod
+                            sch.writeAnswer(Protocol::ANS_ACK);
                         }else{
-                        	sch.writeAnswer(Protocol::ANS_NAK);
-                        	sch.writeAnswer(Protocol::ERR_NG_DOES_NOT_EXIST);
+                            sch.writeAnswer(Protocol::ANS_NAK);
+                            sch.writeAnswer(Protocol::ERR_NG_DOES_NOT_EXIST);
                         }
-                        break;
-                    default:
-                        break;
-                }
-                sch.writeAnswer(Protocol::ANS_END);
-                
-			} catch (ConnectionClosedException&) {
-				server.deregisterConnection(conn);
-				cout << "Client closed connection" << endl;
-			}
-		} else {
-			conn = make_shared<Connection>();
-			server.registerConnection(conn);
-			cout << "New client connects" << endl;
-		}
-	}
-}
+                           break;
+                           
+                           case Protocol::COM_DELETE_ART: // delete article
+                           sch.readCommand(); // PAR_NUM
+                           groupId = sch.readNumber();
+                           sch.readCommand(); // PAR_NUM
+                           int artId = sch.readNumber();
+                           sch.readCommand(); // COM_END
+                           sch.writeAnswer(Protocol::ANS_DELETE_ART);
+                           if(db.removeArticle(groupId, artId)) {
+                               sch.writeAnswer(Protocol::ANS_ACK);
+                           }else{
+                               sch.writeAnswer(Protocol::ANS_NAK);
+                               sch.writeAnswer(Protocol::ERR_NG_DOES_NOT_EXIST);
+                           }
+                           break;
+                           
+                           case Protocol::COM_GET_ART: //get article
+                           sch.readCommand(); // PAR_NUM
+                           groupId = sch.readNumber();
+                           sch.readCommand(); // PAR_NUM
+                           artId = sch.readNumber();
+                           sch.readCommand(); // COM_END
+                           sch.writeAnswer(Protocol::ANS_GET_ART);
+                           artlist = db.listArticles(groupId);
+                           auto it3 = find_if(artlist.begin(), artlist.end(), [&artId](Article art)->bool{ return art.getId() == artId;});
+                           if(it3 != artlist.end()){
+                            sch.writeAnswer(Protocol::ANS_ACK);
+                            sch.writeAnswer(Protocol::PAR_STRING); // PAR_STRING
+                            sch.writeNumber(art.getTitle().size());
+                            smh.writeString(art.getTitle());
+                            sch.writeAnswer(Protocol::PAR_STRING); // PAR_STRING
+                            sch.writeNumber(art.getAuthor().size());
+                            smh.writeString(art.getAuthor());
+                            sch.writeAnswer(Protocol::PAR_STRING); // PAR_STRING
+                            sch.writeNumber(art.getText().size());
+                            smh.writeString(art.getText());
+                        }else{
+                            sch.writeAnswer(Protocol::ANS_NAK);
+                            sch.writeAnswer(Protocol::ERR_NG_DOES_NOT_EXIST);
+                        }
+                              break;
+                              default:
+                              break;
+                              }
+                              sch.writeAnswer(Protocol::ANS_END);
+                              
+                              } catch (ConnectionClosedException&) {
+                                  server.deregisterConnection(conn);
+                                  cout << "Client closed connection" << endl;
+                              }
+                              } else {
+                                  conn = make_shared<Connection>();
+                                  server.registerConnection(conn);
+                                  cout << "New client connects" << endl;
+                              }
+                              }
+                              }
