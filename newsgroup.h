@@ -20,12 +20,14 @@ public:
 	void setId(int newId);
 	int getIndex();
 	void setIndex(int newIndex);
+    
+    std::vector<Article> articles;
 
 private:
 	std::string title;
 	int id;
 	int index;
-	std::vector<Article> articles;
+	
 };
 
 #endif

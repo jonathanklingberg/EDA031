@@ -16,7 +16,7 @@ public:
 	virtual bool addArticle(int news_group_id, const string& art_title,
 		const string& art_author, const string& art_text);
 	virtual bool removeArticle(int news_group_id, int article_id);
-	virtual NewsGroup groupAt(int i) const;
+    
 private:
 	vector<NewsGroup> news_groups;
 };
