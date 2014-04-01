@@ -8,13 +8,14 @@
 class InMemory : public DatabaseInterface {
 public:
 	InMemory();
-	bool createNG(const NewsGroup&);
-	bool removeNG(const NewsGroup&);
-	std::vector<NewsGroup> listNGs() const;
-	std::vector<Article> listArticles(const NewsGroup&) const;
-	bool addArticle(const NewsGroup&, const Article&);
-	bool removeArticle(const NewsGroup&, const Article&);
-	NewsGroup groupAt(int i) const;
+	virtual bool createNG(const string& news_group);
+	virtual bool removeNG(int news_group_id);
+	virtual std::vector<NewsGroup> listNGs() const;
+	virtual std::vector<Article> listArticles(int news_group_id) const;
+	virtual bool addArticle(int news_group_id, const string& art_title, 
+		const string& art_author, const string& art_text);
+	virtual bool removeArticle(int news_group_id, int article_id);
+	virtual NewsGroup groupAt(int i) const;
 private:
 	std::vector<std::vector<NewsGroup>> news_groups;
 };
