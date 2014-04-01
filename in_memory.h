@@ -5,19 +5,20 @@
 #include <vector>
 #include "database_interface.h"
 
+using namespace std;
 class InMemory : public DatabaseInterface {
 public:
 	InMemory();
 	virtual bool createNG(const string& news_group);
 	virtual bool removeNG(int news_group_id);
-	virtual std::vector<NewsGroup> listNGs() const;
-	virtual std::vector<Article> listArticles(int news_group_id) const;
-	virtual bool addArticle(int news_group_id, const string& art_title, 
+	virtual vector<NewsGroup> listNGs() const;
+	virtual vector<Article> listArticles(int news_group_id) const;
+	virtual bool addArticle(int news_group_id, const string& art_title,
 		const string& art_author, const string& art_text);
 	virtual bool removeArticle(int news_group_id, int article_id);
 	virtual NewsGroup groupAt(int i) const;
 private:
-	std::vector<std::vector<NewsGroup>> news_groups;
+	vector<NewsGroup> news_groups;
 };
 
 #endif

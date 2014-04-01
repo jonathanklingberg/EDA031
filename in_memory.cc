@@ -8,8 +8,19 @@ using namespace std;
 InMemory::InMemory() {}
 
 bool InMemory::createNG(const string& news_group_name) {
-	for (unsigned i = 0; i < news_groups.size(); ++i) {
-		NewsGroup &ng = news_groups.at(i)
+
+	auto it = find_if((news_groups.begin()), news_groups.end(), [&news_group_name](NewsGroup ng) { return ng.getTitle() != news_group_name;});
+    if(it != news_groups.end()) {
+    	return false;
+    }
+    NewsGroup news_group(news_group_name);
+	news_group.setId(news_groups.size()); 
+	news_groups.push_back(news_group);
+	return true;
+
+	/*
+	for (size_t i = 0; i < news_groups.size(); ++i) {
+		NewsGroup &ng = news_groups.at(i);
 		if (ng.getId() > -1 && ng.getTitle().compare(news_group_name)) return false;
 	}
 	NewsGroup new_group;
@@ -17,10 +28,11 @@ bool InMemory::createNG(const string& news_group_name) {
 	new_group.setId(news_groups.size()); 
 	news_groups.push_back(new_group);
 	return true;
+	*/
 }
 	
 bool InMemory::removeNG(int news_group_id) {
-	for (unsigned i = 0; i < news_groups.size(); ++i) {
+	for (size_t i = 0; i < news_groups.size(); ++i) {
     	if (ng.getId() == news_groups.at(i).getId()) {
     		news_groups.at(i).setId(-1);
     		return true;
@@ -63,11 +75,13 @@ bool InMemory::addArticle(int news_group_id, const string& art_title,
 	
 bool InMemory::removeArticle(int news_group_id, int article_id) {
 	for (unsigned i = 0; i < news_groups.size(); ++i) {
-		if (news_group.getId() == news_groups.at(i)) {
+		if (news_group.getId() == news_groups.at(i).getId()) {
 			NewsGroup &ng = news_groups.at(i);
-			for ()
+			ng.deleteArticle(article_id);
+			return true;
 		}
 	}
+	return false;
 }
 	
 NewsGroup InMemory::groupAt(int id) const {
