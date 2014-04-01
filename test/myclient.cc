@@ -74,7 +74,7 @@ int main(int argc, char* argv[]) {
                 }
             } else if(command == ns.list_articles) {
                 int param = stoi(parameters);
-                map<int,string> arts = cch.listArt(param);
+                map<int,string> arts = cch.listArts(param);
                 for(auto& a : arts) {
                     cout << a.first<<" "<<a.second<<endl;
                 }
@@ -94,7 +94,8 @@ int main(int argc, char* argv[]) {
                     cerr << "invalid input"<<endl;
                 }
                 int id = stoi(v[0]);
-                if(cch.deleteArt(id,v[1]) == bool) {
+                int art_nbr = stoi(v[1]);
+                if(cch.deleteArt(id,art_nbr) == false) {
                     cerr<<"Article does not exist!"<<endl;
                 }
                 
