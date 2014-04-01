@@ -18,7 +18,7 @@ public:
 	/*
 	 * Create a newsgroup. Returns false if NewsGroup already exists.
 	 */
-	virtual bool createNG(const string& news_group) = 0;
+	virtual bool createNG(const std::string& news_group) = 0;
 	
 	/*
 	 * Removes newsgroup. Returns true if newsgroup was deleted and
@@ -42,8 +42,8 @@ public:
 	 * Adds new article in specified NewsGroup. Returns false
 	 * if newsgroup doesn't exists.
 	 */
-	virtual bool addArticle(int news_group_id, const string& art_title, 
-		const string& art_author, const string& art_text) = 0;
+	virtual bool addArticle(int news_group_id, const std::string& art_title, 
+		const std::string& art_author, const std::string& art_text) = 0;
 	 
 	/* 
 	 * Adds new article in specified NewsGroup. Returns false

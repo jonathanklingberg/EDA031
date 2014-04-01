@@ -9,7 +9,7 @@
 class NewsGroup {
 
 public:
-	NewsGroup(std::string &title);
+	NewsGroup(const std::string &title);
 	~NewsGroup();
 	size_t size() const;
 	std::string getTitle() const;

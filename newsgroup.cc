@@ -5,7 +5,7 @@
 
 using namespace std;
 
-NewsGroup::NewsGroup(string &iTitle) { 
+NewsGroup::NewsGroup(const string &iTitle) { 
 	title = iTitle;
 	id = -1;
 	index = -1;
@@ -24,7 +24,7 @@ void NewsGroup::addArticle(const Article &article) {
 void NewsGroup::deleteArticle(int article_id) {
 	size_t i = 0;
 	while (i < articles.size()
-		&& articles.at(i).getId() != article_id)) {
+		&& articles.at(i).getId() != article_id) {
 		i++;
 	}
 	if (i < articles.size()) articles.erase(articles.begin() + i);
