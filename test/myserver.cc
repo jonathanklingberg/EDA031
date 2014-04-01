@@ -44,7 +44,7 @@ int main(int argc, char* argv[]){
         auto conn = server.waitForActivity();
         MessageHandler smh(*conn.get());
         ServerCommandHandler sch(smh);
-        InMemory::InMemory* db;  // CREATE A DB HERE : Database db();
+        InMemory::InMemory* db();  // CREATE A DB HERE : Database db();
 		if (conn != nullptr) {
 			try {
                 unsigned char command = sch.readCommand();
@@ -62,7 +62,7 @@ int main(int argc, char* argv[]){
                 switch (command) {
                     case Protocol::COM_LIST_NG: // list newsgroups
                         end_command = sch.readCommand();
-                        for(size_t i; i < newsgroups.size(); ++i) {
+                        for(size_t i = 0; i < newsgroups.size(); ++i) {
                         	groups.insert(make_pair(newsgroups[i].getId(), newsgroups[i].getTitle()));
                         }
                         sch.writeAnswer(Protocol::ANS_LIST_NG);
