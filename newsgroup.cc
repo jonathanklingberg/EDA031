@@ -21,10 +21,10 @@ void NewsGroup::addArticle(const Article &article) {
 	articles.push_back(article);
 }
 
-void NewsGroup::deleteArticle(const string artTitle) {
+void NewsGroup::deleteArticle(int article_id) {
 	size_t i = 0;
 	while (i < articles.size()
-		&& !articles.at(i).getTitle().compare(artTitle)) {
+		&& articles.at(i).getId() != article_id)) {
 		i++;
 	}
 	if (i < articles.size()) articles.erase(articles.begin() + i);

@@ -63,11 +63,13 @@ bool InMemory::addArticle(int news_group_id, const string& art_title,
 	
 bool InMemory::removeArticle(int news_group_id, int article_id) {
 	for (unsigned i = 0; i < news_groups.size(); ++i) {
-		if (news_group.getId() == news_groups.at(i)) {
+		if (news_group.getId() == news_groups.at(i).getId()) {
 			NewsGroup &ng = news_groups.at(i);
-			for ()
+			ng.deleteArticle(article_id);
+			return true;
 		}
 	}
+	return false;
 }
 	
 NewsGroup InMemory::groupAt(int id) const {
