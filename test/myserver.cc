@@ -7,6 +7,7 @@
 #include "in_memory.h"
 #include "newsgroup.h"
 #include "database_interface.h"
+#include "article.h"
 
 #include <memory>
 #include <iostream>
@@ -42,7 +43,7 @@ int main(int argc, char* argv[]){
 	auto conn = server.waitForActivity();
         MessageHandler smh(*conn.get());
         ServerCommandHandler sch(smh);
-        DatabaseInterface db();  // CREATE A DB HERE : Database db();
+        DatabaseInterface db;  // CREATE A DB HERE : Database db();
 		if (conn != nullptr) {
 			try {
                 unsigned char command = sch.readCommand();
@@ -52,8 +53,8 @@ int main(int argc, char* argv[]){
                 int titlesize;
                 int authorsize;
                 int textsize;
-                vector<NewsGroup> newsgoups = db.listNGs();
-                vector<Articles> artlist;
+                vector<NewsGroup> newsgoups  = db.listNGs();
+                vector<Article> artlist;
                 map<size_t, string> groups;
                 switch (command) {
                     case Protocol::COM_LIST_NG: // list newsgroups
@@ -73,7 +74,7 @@ int main(int argc, char* argv[]){
                     	end_command = sch.readCommand();                  
                     	db.createNG(groupName);
                         sch.writeAnswer(Protocol::ANS_CREATE_NG);
-                        if (find_if(newsgroups.begin(), newsgroups.end(), [string groupName](NewsGroup ng){ return ng.getTitle() != groupName}) {  //lambda
+                        if (find_if((newsgroups.begin()), newsgroups.end(), [string groupName](NewsGroup ng){ return ng.getTitle() != groupName}) {  //lambda
                             Newsgroup ng(groupName);
                             db.createNG(ng);
                             sch.writeAnswer(Protocol::ANS_ACK);
