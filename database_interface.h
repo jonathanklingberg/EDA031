@@ -30,13 +30,13 @@ public:
 	 * Lists all newsgroups. Returns array of newsgroups. If no newsgroups
 	 * exists an empty array is returned.
 	 */
-	virtual std::vector<NewsGroup> listNGs() = 0;
+	virtual std::vector<NewsGroup> listNGs() const = 0;
 	
 	/*
 	 * Lists all articles in specified newsgroup. Returns array of newsgroups. 
 	 * If no newsgroups exists an empty array is returned.
 	 */
-	virtual std::vector<Article> listArticles(int news_group_id) = 0;
+	virtual std::vector<Article> listArticles(int news_group_id) const = 0;
 	
 	/* 
 	 * Adds new article in specified NewsGroup. Returns false
@@ -51,11 +51,6 @@ public:
 	 */
 	virtual bool removeArticle(int news_group_id, int article_id) = 0;
 	 
-	/*
-	 * Gets group with the specified id. Return a news_group with id set to -1 if 
-	 * not exist.
-	 */ 
-	virtual NewsGroup groupAt(int i) = 0;
 };
 
 #endif

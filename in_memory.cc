@@ -4,7 +4,7 @@
 
 using namespace std;
 
-InMemory::InMemory() {}
+InMemory::InMemory(){}
 
 bool InMemory::createNG(const string& news_group_name) {
     

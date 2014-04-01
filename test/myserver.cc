@@ -44,7 +44,7 @@ int main(int argc, char* argv[]){
         auto conn = server.waitForActivity();
         MessageHandler smh(*conn.get());
         ServerCommandHandler sch(smh);
-        InMemory::InMemory* db();  // CREATE A DB HERE : Database db();
+        InMemory db();  // CREATE A DB HERE : Database db();
 		if (conn != nullptr) {
 			try {
                 unsigned char command = sch.readCommand();
@@ -56,7 +56,7 @@ int main(int argc, char* argv[]){
                 int textsize;
                 int artId;
                 string groupName;
-                vector<NewsGroup> newsgroups  = db->listNGs();
+                vector<NewsGroup> newsgroups  = db.listNGs();
                 vector<Article> artlist;
                 map<int, string> groups;
                 switch (command) {
@@ -78,7 +78,7 @@ int main(int argc, char* argv[]){
                     	//db->createNG(groupName);
                         sch.writeAnswer(Protocol::ANS_CREATE_NG);
                         //auto it = find_if((newsgroups.begin()), newsgroups.end(), [&groupName](NewsGroup ng){ return ng.getTitle() != groupName;});
-                        if(db->createNG(groupName)) {
+                        if(db.createNG(groupName)) {
                             sch.writeAnswer(Protocol::ANS_ACK);
                         }else{
                             sch.writeAnswer(Protocol::ANS_NAK);
@@ -94,7 +94,7 @@ int main(int argc, char* argv[]){
                         sch.readCommand();
                         
                         sch.writeAnswer(Protocol::ANS_DELETE_NG);
-                        if(db->removeNG(groupId)){               // Anropa databas metod
+                        if(db.removeNG(groupId)){               // Anropa databas metod
                             sch.writeAnswer(Protocol::ANS_ACK);
                         }else{
                             sch.writeAnswer(Protocol::ANS_NAK);
@@ -112,7 +112,7 @@ int main(int argc, char* argv[]){
                         auto it2 = find_if((newsgroups.begin()), newsgroups.end(), [&groupId](NewsGroup ng){ return ng.getId() == groupId;});
                         if(it2 != newsgroups.end()) {
                             sch.writeAnswer(Protocol::ANS_ACK);
-                            vector<Article> articles = db->listArticles(groupId);
+                            vector<Article> articles = db.listArticles(groupId);
                             sch.writeAnswer(Protocol::PAR_NUM);
                             sch.writeNumber(articles.size());                 //Antal artiklar
                             for(size_t i = 0; i < articles.size(); ++i) {
@@ -144,7 +144,7 @@ int main(int argc, char* argv[]){
                         Article art(title, author, text);
                         sch.readCommand(); // COM_END
                         sch.writeAnswer(Protocol::ANS_CREATE_ART);
-                        if(db->addArticle(groupId,title,author,text)){               // Anropa databas metod
+                        if(db.addArticle(groupId,title,author,text)){               // Anropa databas metod
                             sch.writeAnswer(Protocol::ANS_ACK);
                         }else{
                             sch.writeAnswer(Protocol::ANS_NAK);
@@ -160,7 +160,7 @@ int main(int argc, char* argv[]){
                            artId = sch.readNumber();
                            sch.readCommand(); // COM_END
                            sch.writeAnswer(Protocol::ANS_DELETE_ART);
-                           if(db->removeArticle(groupId, artId)) {
+                           if(db.removeArticle(groupId, artId)) {
                                sch.writeAnswer(Protocol::ANS_ACK);
                            }else{
                                sch.writeAnswer(Protocol::ANS_NAK);
@@ -175,7 +175,7 @@ int main(int argc, char* argv[]){
                            artId = sch.readNumber();
                            sch.readCommand(); // COM_END
                            sch.writeAnswer(Protocol::ANS_GET_ART);
-                           artlist = db->listArticles(groupId);
+                           artlist = db.listArticles(groupId);
                            auto it3 = find_if(artlist.begin(), artlist.end(), [&artId](Article art)->bool{ return art.getId() == artId;});
                            if(it3 != artlist.end()){
                             sch.writeAnswer(Protocol::ANS_ACK);
