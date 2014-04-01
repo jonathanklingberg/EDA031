@@ -53,9 +53,9 @@ int main(int argc, char* argv[]){
                 int titlesize;
                 int authorsize;
                 int textsize;
-                vector<NewsGroup> newsgoups  = db.listNGs();
+                vector<NewsGroup> newsgroups  = db.listNGs();
                 vector<Article> artlist;
-                map<size_t, string> groups;
+                map<int, string> groups;
                 switch (command) {
                     case Protocol::COM_LIST_NG: // list newsgroups
                         end_command = sch.readCommand();
@@ -74,7 +74,7 @@ int main(int argc, char* argv[]){
                     	end_command = sch.readCommand();                  
                     	db.createNG(groupName);
                         sch.writeAnswer(Protocol::ANS_CREATE_NG);
-                        if (find_if((newsgroups.begin()), newsgroups.end(), [string groupName](NewsGroup ng){ return ng.getTitle() != groupName}) {  //lambda
+                        if (find_if((newsgroups.begin()), newsgroups.end(), [&groupName](NewsGroup ng)->bool{ return ng.getTitle() != groupName;}) {  //lambda
                             Newsgroup ng(groupName);
                             db.createNG(ng);
                             sch.writeAnswer(Protocol::ANS_ACK);
@@ -104,7 +104,7 @@ int main(int argc, char* argv[]){
                         sch.readCommand(); //COM_END
                         
                         sch.writeAnswer(Protocol::ANS_LIST_ART);
-                         if(find_if(newsgroups.begin(), newsgroups.end(), [string groupName](NewsGroup ng){ return ng.getId() == groupId}) {
+                            if(find_if(newsgroups.begin(), newsgroups.end(), [&groupId](NewsGroup ng)->bool{ return ng.getId() == groupId;}) {
                             sch.writeAnswer(Protocol::ANS_ACK);	
                             vector<Article> articles = db.listArticles(groupId);
                             sch.writeAnswer(Protocol::PAR_NUM);
@@ -133,7 +133,7 @@ int main(int argc, char* argv[]){
                         	string author = smh.readString(authorsize);
                         	sch.readCommand();
                         	textsize = sch.readNumber();
-                        	string text = smh.readString();
+                        	string text = smh.readString(textsize);
                         	Article art(title, author, text);
                         	sch.readCommand(); // COM_END
                         	sch.writeAnswer(Protocol::ANS_CREATE_ART);
@@ -148,27 +148,27 @@ int main(int argc, char* argv[]){
                     case Protocol::COM_DELETE_ART: // delete article
                         	sch.readCommand(); // PAR_NUM
                         	groupId = sch.readNumber();
-                        	sch.readCommand() // PAR_NUM
+                               sch.readCommand(); // PAR_NUM
                         	int artId = sch.readNumber();
                         	sch.readCommand(); // COM_END
                         	sch.writeAnswer(Protocol::ANS_DELETE_ART);
-                        	if(removeArticle(groupId, artId)) {
-                        		sch.writeAnwer(Protocol::ANS_ACK);
+                        	if(db.removeArticle(groupId, artId)) {
+                        		sch.writeAnswer(Protocol::ANS_ACK);
                         	}else{
                         		sch.writeAnswer(Protocol::ANS_NAK);
                         		sch.writeAnswer(Protocol::ERR_NG_DOES_NOT_EXIST);
                         	}			
                         break;
                         
-                    case COM_GET_ART: //get article
+                               case Protocol::COM_GET_ART: //get article
                     	sch.readCommand(); // PAR_NUM
                         groupId = sch.readNumber();
-                        sch.readCommand() // PAR_NUM
-                        int artId = sch.readNumber();
+                        sch.readCommand(); // PAR_NUM
+                        artId = sch.readNumber();
                         sch.readCommand(); // COM_END
-                        sch.writeCommand(Protocol::ANS_GET_ART);
+                        sch.writeAnswer(Protocol::ANS_GET_ART);
                         artlist = db.listArticles(groupId);
-                        if(find_if(artlist.begin(), artlist.end(), [int artId](Article art){ return art.getId() == artId}) {
+                               if(find_if(artlist.begin(), artlist.end(), [&artId](Article art)->bool{ return art.getId() == artId;}) {
                         	sch.writeAnswer(Protocol::ANS_ACK);
                         	sch.writeAnswer(Protocol::PAR_STRING); // PAR_STRING
                         	sch.writeNumber(art.getTitle().size());
