@@ -47,6 +47,11 @@ int main(int argc, char* argv[]){
 			try {
                 unsigned char command = sch.readCommand();
                 unsigned char end_command;
+                int groupId;
+                int namesize;
+                int titlesize;
+                int authorsize;
+                int textsize;
                 vector<NewsGroup> newsgoups = db.listNGs();
                 vector<Articles> artlist;
                 map<size_t, string> groups;
@@ -62,7 +67,7 @@ int main(int argc, char* argv[]){
                         
                     case Protocol::COM_CREATE_NG: // create newsgroup
                     	sch.readCommand(); //PAR_STRING
-                    	int namesize = sch.readNumber();
+                    	namesize = sch.readNumber();
                     	string groupName = smh.readString(namesize);
                     	//int res = db.addGroup(groupId);
                     	end_command = sch.readCommand();                  
@@ -80,7 +85,7 @@ int main(int argc, char* argv[]){
                         
                     case Protocol::COM_DELETE_NG : // deletes a specified newsgroup
                         sch.readCommand();
-                        int groupId = sch.readNumber();
+                        groupId = sch.readNumber();
                         sch.readCommand();
                         
                         sch.writeAnswer(Protocol::ANS_DELETE_NG);
@@ -94,7 +99,7 @@ int main(int argc, char* argv[]){
                         
                     case Protocol::COM_LIST_ART: // list articles
                         sch.readCommand(); //PAR_NUM
-                        int groupId = sch.readNumber();   //dvs newsgroup ID
+                        groupId = sch.readNumber();   //dvs newsgroup ID
                         sch.readCommand(); //COM_END
                         
                         sch.writeAnswer(Protocol::ANS_LIST_ART);
@@ -118,15 +123,15 @@ int main(int argc, char* argv[]){
                         
                     case Protocol::COM_CREATE_ART: // create article
                         	sch.readCommand();   // PAR_NUM
-                        	int groupId = sch.readNumber();   // N 
+                        	groupId = sch.readNumber();   // N 
                         	sch.readCommand(); // PAR_STRING
-                        	int titlesize = sch.readNumber();  
+                        	titlesize = sch.readNumber();  
                         	string title = smh.readString(titlesize);   // läser in titel
                         	sch.readCommand();
-                        	int authorsize = sch.readNumber();
+                        	authorsize = sch.readNumber();
                         	string author = smh.readString(authorsize);
                         	sch.readCommand();
-                        	int textsize = sch.readNumber();
+                        	textsize = sch.readNumber();
                         	string text = smh.readString();
                         	Article art(title, author, text);
                         	sch.readCommand(); // COM_END
@@ -141,7 +146,7 @@ int main(int argc, char* argv[]){
                         
                     case Protocol::COM_DELETE_ART: // delete article
                         	sch.readCommand(); // PAR_NUM
-                        	int groupId = sch.readNumber();
+                        	groupId = sch.readNumber();
                         	sch.readCommand() // PAR_NUM
                         	int artId = sch.readNumber();
                         	sch.readCommand(); // COM_END
@@ -156,7 +161,7 @@ int main(int argc, char* argv[]){
                         
                     case COM_GET_ART: //get article
                     	sch.readCommand(); // PAR_NUM
-                        int groupId = sch.readNumber();
+                        groupId = sch.readNumber();
                         sch.readCommand() // PAR_NUM
                         int artId = sch.readNumber();
                         sch.readCommand(); // COM_END
