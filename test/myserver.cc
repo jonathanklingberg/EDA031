@@ -44,7 +44,7 @@ int main(int argc, char* argv[]){
         auto conn = server.waitForActivity();
         MessageHandler smh(*conn.get());
         ServerCommandHandler sch(smh);
-        InMemory db();  // CREATE A DB HERE : Database db();
+        InMemory db;  // CREATE A DB HERE : Database db();
 		if (conn != nullptr) {
 			try {
                 unsigned char command = sch.readCommand();
@@ -56,12 +56,13 @@ int main(int argc, char* argv[]){
                 int textsize;
                 int artId;
                 string groupName;
-                vector<NewsGroup> newsgroups  = db.listNGs();
+                vector<NewsGroup> newsgroups;
                 vector<Article> artlist;
                 map<int, string> groups;
                 switch (command) {
                     case Protocol::COM_LIST_NG: // list newsgroups
                         end_command = sch.readCommand();
+                        newsgroups  = db.listNGs();
                         for(size_t i = 0; i < newsgroups.size(); ++i) {
                         	groups.insert(make_pair(newsgroups[i].getId(), newsgroups[i].getTitle()));
                         }

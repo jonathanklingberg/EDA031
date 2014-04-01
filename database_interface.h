@@ -14,6 +14,8 @@
 class DatabaseInterface {
 public:
 	virtual ~DatabaseInterface() = default;
+    
+    DatabaseInterface(){}
 	
 	/*
 	 * Create a newsgroup. Returns false if NewsGroup already exists.
