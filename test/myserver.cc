@@ -154,7 +154,7 @@ int main(int argc, char* argv[]){
                         sch.readCommand();
                         textsize = sch.readNumber();
                         string text = smh.readString(textsize);
-                        Article art(title, author, text);
+                        //Article art(title, author, text);
                         sch.readCommand(); // COM_END
                         sch.writeAnswer(Protocol::ANS_CREATE_ART);
                         if(db.addArticle(groupId,title,author,text)){               // Anropa databas metod

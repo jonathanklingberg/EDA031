@@ -64,7 +64,23 @@ vector<Article> InMemory::listArticles(int news_group_id) const {
 
 bool InMemory::addArticle(int news_group_id, const string& art_title,
 		const string& art_author, const string& art_text) {
-
+    vector<NewsGroup> ngs = listNGs();
+    for(NewsGroup ng : ngs ) {
+        if(ng.getId() == news_group_id){
+            Article art(art_title,art_author,art_text);
+            news_groups[news_group_id].addArticle(art);
+            cout << news_groups[news_group_id].articleAt(0).getTitle() <<endl;
+            return true;
+        }else{
+            return false;
+        }
+    }
+//    auto it = find_if((news_groups.begin()), news_groups.end(), [&news_group_id](NewsGroup ng){ return ng.getId() == news_group_id;});
+//    if(it != news_groups.end()){
+//        news_groups[news_group_id].addArticle(Article(art_title,art_author,art_text));
+//        return true;
+//    }
+//    return false;
 }
 
 bool InMemory::removeArticle(int news_group_id, int article_id) {
