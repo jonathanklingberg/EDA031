@@ -48,14 +48,16 @@ vector<NewsGroup> InMemory::listNGs() const{
 }
 
 vector<Article> InMemory::listArticles(int news_group_id) const {
-	vector<Article> res;
-    auto it = find_if((news_groups.begin()), news_groups.end(), [&news_group_id](NewsGroup ng){ return ng.getId() == news_group_id;});
-    if(it != news_groups.end()) {
+    vector<Article> res;
+    //auto it = find_if((news_groups.begin()), news_groups.end(), [&news_group_id](NewsGroup ng){ return ng.getId() == news_group_id;});
+    for(NewsGroup ng : news_groups) {
+    if(ng.getId() == news_group_id) {
         for(Article a : news_groups[news_group_id].articles) {
             if(a.getId() > -1){
                 res.push_back(a);
             }
         }
+    }
     }
     return res;
 }
