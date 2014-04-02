@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <algorithm>
 
 using namespace std;
 
@@ -9,10 +10,12 @@ InMemory::InMemory(){}
 
 bool InMemory::createNG(const string& news_group_name) {
     
-//	auto it = find_if((news_groups.begin()), news_groups.end(), [&news_group_name](NewsGroup ng) { return ng.getTitle() == news_group_name;});
-//    if(it != news_groups.end()) {
-//    	return false;
-//    }
+    //auto it = find_if((news_groups.begin()), news_groups.end(), [&news_group_name](NewsGroup ng) { return ng.getTitle() == news_group_name;});
+    for(NewsGroup ng : news_groups) {
+    if(ng.getTitle() == news_group_name) {
+    	return false;
+    }
+    }
     NewsGroup news_group(news_group_name);
     news_group.setId(news_groups.size());
     news_groups.push_back(news_group);
