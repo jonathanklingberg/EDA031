@@ -69,7 +69,9 @@ bool InMemory::addArticle(int news_group_id, const string& art_title,
         if(ng.getId() == news_group_id){
             Article art(art_title,art_author,art_text);
             news_groups[news_group_id].addArticle(art);
+            cout<<"funkar utskrift?" << endl;
             cout << news_groups[news_group_id].articleAt(0).getTitle() <<endl;
+            cout << "ja den funka" << endl;
             return true;
         }else{
             return false;
@@ -83,8 +85,7 @@ bool InMemory::addArticle(int news_group_id, const string& art_title,
 //    return false;
 }
 
-bool InMemory::removeArticle(int news_group_id, int article_id) {
-    
+bool InMemory::removeArticle(int news_group_id, int article_id) {   
 	for (size_t i = 0; i < news_groups.size(); ++i) {
 		if (news_group_id == news_groups[i].getId()) {
 			NewsGroup ng = news_groups[i];
@@ -95,6 +96,15 @@ bool InMemory::removeArticle(int news_group_id, int article_id) {
 	return false;
 }
 
+
+Article InMemory::getArticle(int groupId, int artId) const {
+	vector<Article> arts = listArticles(groupId);
+		for(Article a : arts) {
+		 	if(a.getId() == artId) {
+				return a;
+			}
+		}
+	}
 
 
 

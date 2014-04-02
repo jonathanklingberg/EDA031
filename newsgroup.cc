@@ -31,7 +31,7 @@ void NewsGroup::deleteArticle(int article_id) {
 }
 
 Article NewsGroup::articleAt(int i) const {
-	return articles.at(i);
+	return articles[i];
 }
 
 int NewsGroup::getId() { return id; }

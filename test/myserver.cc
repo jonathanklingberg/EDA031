@@ -189,18 +189,24 @@ int main(int argc, char* argv[]){
                            sch.readCommand(); // COM_END
                            sch.writeAnswer(Protocol::ANS_GET_ART);
                            artlist = db.listArticles(groupId);
-                           auto it3 = find_if(artlist.begin(), artlist.end(), [&artId](Article art)->bool{ return art.getId() == artId;});
-                           if(it3 != artlist.end()){
+                           Article art;
+                           for(Article a : artlist) {
+                           	if(a.getId == artId) {
+                           		check = true;
+                           		art = db.getArticle(groupId, artId);
+                           	}
+                           }
+                           if(check){
                             sch.writeAnswer(Protocol::ANS_ACK);
                             sch.writeAnswer(Protocol::PAR_STRING); // PAR_STRING
-                            sch.writeNumber(it3->getTitle().size());
-                            smh.writeString(it3->getTitle());
+                            sch.writeNumber(art.getTitle().size());
+                            smh.writeString(art.getTitle());
                             sch.writeAnswer(Protocol::PAR_STRING); // PAR_STRING
-                            sch.writeNumber(it3->getAuthor().size());
-                            smh.writeString(it3->getAuthor());
+                            sch.writeNumber(art.getAuthor().size());
+                            smh.writeString(art.getAuthor());
                             sch.writeAnswer(Protocol::PAR_STRING); // PAR_STRING
-                            sch.writeNumber(it3->getText().size());
-                            smh.writeString(it3->getText());
+                            sch.writeNumber(art.getText().size());
+                            smh.writeString(art.getText());
                         }else{
                             sch.writeAnswer(Protocol::ANS_NAK);
                             sch.writeAnswer(Protocol::ERR_NG_DOES_NOT_EXIST);
