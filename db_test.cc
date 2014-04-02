@@ -23,5 +23,21 @@ int main() {
 	cout << "Index: " << art_1.getIndex() << endl;
 	cout << "Id: " << art_1.getId() << endl;
 	
-	//Test NewsGroup
+	//InMemory
+	InMemory db;
+	bool successfull;
+	
+	string ng_name;
+	ng_name = "aftonbladet";
+	successfull = db.createNG(ng_name);
+	if (successfull) cout << "nice! aftonbladet created" << endl;
+	
+	ng_name = "DN";
+	successfull = db.createNG(ng_name);
+	if (successfull) cout << "nice! DN created" << endl;
+	
+	ng_name = "aftonbladet";
+	successfull = db.createNG(ng_name);
+	if (!successfull) cout << "nice! aftonbladet not created" << endl;
+	
 }
