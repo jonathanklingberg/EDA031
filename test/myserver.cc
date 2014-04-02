@@ -49,6 +49,7 @@ int main(int argc, char* argv[]){
 			try {
                 unsigned char command = sch.readCommand();
                 unsigned char end_command;
+                bool check = false;   // Används i COM_LIST_ART
                 int groupId;
                 int namesize;
                 int titlesize;
@@ -68,17 +69,13 @@ int main(int argc, char* argv[]){
                         cout<<newsgroups.size()<<endl;
                         for(size_t i = 0; i < newsgroups.size(); ++i) {
                         	groups.insert(make_pair(newsgroups[i].getId(), newsgroups[i].getTitle()));
-                            cout<<"vi hittade en grupp"<<endl;
                         }
                         sch.writeAnswer(Protocol::ANS_LIST_NG);
-                        cout<<"nu ska vi skriva maps"<<endl;
                         sch.writeMap(groups);
-                        cout<<"hallååååå"<<endl;
                         break;
                         
                     case Protocol::COM_CREATE_NG:{ // create newsgroup
                     	sch.readCommand(); //PAR_STRING
-                        cout<<"skapa en gruppjävel"<<endl;
                     	namesize = sch.readNumber();
                     	groupName = smh.readString(namesize);
                         cout <<groupName<<endl;
@@ -87,10 +84,8 @@ int main(int argc, char* argv[]){
                     	//db->createNG(groupName);
                         sch.writeAnswer(Protocol::ANS_CREATE_NG);
                         //auto it = find_if((newsgroups.begin()), newsgroups.end(), [&groupName](NewsGroup ng){ return ng.getTitle() != groupName;});
-                        cout << "in i inmemory för satans"<<endl;
                         if(db.createNG(groupName)) {
                             sch.writeAnswer(Protocol::ANS_ACK);
-                            cout<<"skapat"<<endl;
                         }else{
                             sch.writeAnswer(Protocol::ANS_NAK);
                             sch.writeAnswer(Protocol::ERR_NG_ALREADY_EXISTS);
@@ -120,8 +115,15 @@ int main(int argc, char* argv[]){
                         sch.readCommand(); //COM_END
                         
                         sch.writeAnswer(Protocol::ANS_LIST_ART);
-                        auto it2 = find_if((newsgroups.begin()), newsgroups.end(), [&groupId](NewsGroup ng){ return ng.getId() == groupId;});
-                        if(it2 != newsgroups.end()) {
+                        newsgroups = db.listNGs();  //existing groups
+                        //auto it2 = find_if((newsgroups.begin()), newsgroups.end(), [&groupId](NewsGroup ng){ return ng.getId() == groupId;});
+                        for(NewsGroup ng : newsgroups) { 
+                        	if(ng.getId() == groupId) {
+                        	cout << "com list art kollar om newsgroup finns" <<  endl;
+                        		check = true;
+                        	}
+                        }
+                        if(check) {
                             sch.writeAnswer(Protocol::ANS_ACK);
                             vector<Article> articles = db.listArticles(groupId);
                             sch.writeAnswer(Protocol::PAR_NUM);
