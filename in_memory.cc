@@ -12,7 +12,7 @@ bool InMemory::createNG(const string& news_group_name) {
     
     //auto it = find_if((news_groups.begin()), news_groups.end(), [&news_group_name](NewsGroup ng) { return ng.getTitle() == news_group_name;});
     for(NewsGroup ng : news_groups) {
-    if(ng.getTitle() == news_group_name) {
+    if(ng.getTitle() == news_group_name && ng.getId() > -1) {
     	return false;
     }
     }
