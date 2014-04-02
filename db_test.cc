@@ -25,6 +25,9 @@ int main() {
 	
 	//InMemory
 	InMemory db;
+	
+	//----------- createNG-test
+	
 	bool successfull;
 	
 	string ng_name;
@@ -39,5 +42,22 @@ int main() {
 	ng_name = "aftonbladet";
 	successfull = db.createNG(ng_name);
 	if (!successfull) cout << "nice! aftonbladet not created" << endl;
+	
+	//------------- listNGs-test
+	
+	vector<NewsGroup> ngs = db.listNGs();
+	cout << "Size should be 2. It is " << ngs.size() << endl;
+	
+	for (NewsGroup ng : ngs) {
+		cout << "Name: " << ng.getTitle() << ". ID is: " << ng.getId() << endl;
+	}
+	
+	//-------------- removeNG-test
+	
+	db.removeNG(0);
+	ngs = db.listNGs();
+	cout << "Size should be 1. It is " << ngs.size() << endl;
+	
+	//-------------- 
 	
 }
