@@ -13,8 +13,9 @@ void MessageHandler::writeNumber(int value){
 }
 string MessageHandler::readString(int n){
     string s;
-    char ch = 0;
+    char ch;
     for(int i = 0; i < n; ++i) {
+        ch = readByte();
         s += ch;
     }
     return s;

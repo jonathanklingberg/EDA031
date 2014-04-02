@@ -1,6 +1,7 @@
 #include "in_memory.h"
 #include <string>
 #include <vector>
+#include <iostream>
 
 using namespace std;
 
@@ -8,13 +9,13 @@ InMemory::InMemory(){}
 
 bool InMemory::createNG(const string& news_group_name) {
     
-	auto it = find_if((news_groups.begin()), news_groups.end(), [&news_group_name](NewsGroup ng) { return ng.getTitle() != news_group_name;});
-    if(it != news_groups.end()) {
-    	return false;
-    }
+//	auto it = find_if((news_groups.begin()), news_groups.end(), [&news_group_name](NewsGroup ng) { return ng.getTitle() == news_group_name;});
+//    if(it != news_groups.end()) {
+//    	return false;
+//    }
     NewsGroup news_group(news_group_name);
-	news_group.setId(news_groups.size());
-	news_groups.push_back(news_group);
+    news_group.setId(news_groups.size());
+    news_groups.push_back(news_group);
 	return true;
 }
 
@@ -27,14 +28,19 @@ bool InMemory::removeNG(int news_group_id) {
     return false;
 }
 
-vector<NewsGroup> InMemory::listNGs() const {
+vector<NewsGroup> InMemory::listNGs() const{
 	vector<NewsGroup> ngs;
-	for (size_t i = 0; i < news_groups.size(); ++i) {
-		NewsGroup ng = news_groups[i];
-    	if (ng.getId() > -1) {
-    		ngs.push_back(ng);
-    	}
+    for(NewsGroup ng: news_groups){
+        if(ng.getId() > -1){
+            ngs.push_back(ng);
+        }
     }
+//	for (size_t i = 0; i < news_groups.size(); ++i) {
+//		NewsGroup ng = news_groups[i];
+//    	if (ng.getId() > -1) {
+//    		ngs.push_back(ng);
+//    	}
+//    }
 	return ngs;
 }
 

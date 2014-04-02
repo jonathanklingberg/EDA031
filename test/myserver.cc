@@ -46,6 +46,7 @@ int main(int argc, char* argv[]){
         ServerCommandHandler sch(smh);
         InMemory db;  // CREATE A DB HERE : Database db();
 		if (conn != nullptr) {
+            cout<<"something is happening"<<endl;
 			try {
                 unsigned char command = sch.readCommand();
                 unsigned char end_command;
@@ -61,26 +62,36 @@ int main(int argc, char* argv[]){
                 map<int, string> groups;
                 switch (command) {
                     case Protocol::COM_LIST_NG: // list newsgroups
+                        cout << "lista grupper"<<endl;
                         end_command = sch.readCommand();
-                        newsgroups  = db.listNGs();
+                        cout << end_command<<endl;
+                        newsgroups = db.listNGs();
+                        cout<<newsgroups.size()<<endl;
                         for(size_t i = 0; i < newsgroups.size(); ++i) {
                         	groups.insert(make_pair(newsgroups[i].getId(), newsgroups[i].getTitle()));
+                            cout<<"vi hittade en grupp"<<endl;
                         }
                         sch.writeAnswer(Protocol::ANS_LIST_NG);
+                        cout<<"nu ska vi skriva maps"<<endl;
                         sch.writeMap(groups);
+                        cout<<"hallååååå"<<endl;
                         break;
                         
                     case Protocol::COM_CREATE_NG:{ // create newsgroup
                     	sch.readCommand(); //PAR_STRING
+                        cout<<"skapa en gruppjävel"<<endl;
                     	namesize = sch.readNumber();
                     	groupName = smh.readString(namesize);
+                        cout <<groupName<<endl;
                     	//int res = db.addGroup(groupId);
                     	end_command = sch.readCommand();
                     	//db->createNG(groupName);
                         sch.writeAnswer(Protocol::ANS_CREATE_NG);
                         //auto it = find_if((newsgroups.begin()), newsgroups.end(), [&groupName](NewsGroup ng){ return ng.getTitle() != groupName;});
+                        cout << "in i inmemory för satans"<<endl;
                         if(db.createNG(groupName)) {
                             sch.writeAnswer(Protocol::ANS_ACK);
+                            cout<<"skapat"<<endl;
                         }else{
                             sch.writeAnswer(Protocol::ANS_NAK);
                             sch.writeAnswer(Protocol::ERR_NG_ALREADY_EXISTS);

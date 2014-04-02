@@ -9,6 +9,7 @@
 
 using namespace std;
 
+
 vector<string> Myclient::validate_input(string& param) {
     vector<string> res;
     int position;
@@ -59,14 +60,23 @@ int main(int argc, char* argv[]) {
                     cout << com <<endl;
                 }
             } else if(command == ns.list) {
+                cout<<"jag vill lista grupper tack"<<endl;
                 map<int,string> groups = cch.listGroups();
+                cout<<"jaha här var en map"<<endl;
+                if(groups.size() == 0){
+                    cout << "empty"<<endl;
+                }
                 for(auto& g : groups) {
+                    cout<<"hej hej för satans SKRIV UT DÅ"<<endl;
                     cout << g.first<< " " << g.second<<endl;
                 }
             } else if(command == ns.create_group) {
-                if(cch.createGroup(parameters) == false) {
-                    cerr << "newsgroup already exists!"<<endl;
-                }
+                cout<<"skapa grupp tack"<<endl;
+                cch.createGroup(parameters);
+//                if(cch.createGroup(parameters) == false) {
+//                    cerr << "newsgroup already exists!"<<endl;
+//                }
+                cout<<"group was created för satans"<<endl;
             } else if(command == ns.delete_group) {
                 int param = stoi(parameters);
                 if(cch.deleteGroup(param) == false) {
