@@ -39,12 +39,11 @@ int main(int argc, char* argv[]){
 		cerr << "Server initialization error." << endl;
 		exit(1);
 	}
-	
+	InMemory db;  // CREATE A DB HERE : Database db();
 	while (true) {
         auto conn = server.waitForActivity();
         MessageHandler smh(*conn.get());
         ServerCommandHandler sch(smh);
-        InMemory db;  // CREATE A DB HERE : Database db();
 		if (conn != nullptr) {
             cout<<"something is happening"<<endl;
 			try {
