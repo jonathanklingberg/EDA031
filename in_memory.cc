@@ -96,7 +96,7 @@ bool InMemory::removeArticle(int news_group_id, int article_id) {
 	return false;
 }
 
-
+/*
 Article InMemory::getArticle(int groupId, int artId) const {
 	vector<Article> arts = listArticles(groupId);
 		for(Article a : arts) {
@@ -105,7 +105,7 @@ Article InMemory::getArticle(int groupId, int artId) const {
 			}
 		}
 	}
-
+*/
 
 
 

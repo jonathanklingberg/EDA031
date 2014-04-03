@@ -126,6 +126,7 @@ int main(int argc, char* argv[]){
                         if(check) {
                             sch.writeAnswer(Protocol::ANS_ACK);
                             vector<Article> articles = db.listArticles(groupId);
+                            cout << articles.size() << endl;      // varför är size=0?
                             sch.writeAnswer(Protocol::PAR_NUM);
                             sch.writeNumber(articles.size());                 //Antal artiklar
                             for(size_t i = 0; i < articles.size(); ++i) {
@@ -189,24 +190,27 @@ int main(int argc, char* argv[]){
                            sch.readCommand(); // COM_END
                            sch.writeAnswer(Protocol::ANS_GET_ART);
                            artlist = db.listArticles(groupId);
-                           Article art;
+                           string t, ath, text;                      
                            for(Article a : artlist) {
-                           	if(a.getId == artId) {
+                           	if(a.getId() == artId) {
                            		check = true;
-                           		art = db.getArticle(groupId, artId);
+                           		t = a.getTitle();
+                           		ath = a.getAuthor();
+                           		text = a.getText();
                            	}
                            }
                            if(check){
+                           	cout << text << endl;
                             sch.writeAnswer(Protocol::ANS_ACK);
                             sch.writeAnswer(Protocol::PAR_STRING); // PAR_STRING
-                            sch.writeNumber(art.getTitle().size());
-                            smh.writeString(art.getTitle());
+                            sch.writeNumber(t.size());
+                            smh.writeString(t);
                             sch.writeAnswer(Protocol::PAR_STRING); // PAR_STRING
-                            sch.writeNumber(art.getAuthor().size());
-                            smh.writeString(art.getAuthor());
+                            sch.writeNumber(ath.size());
+                            smh.writeString(ath);
                             sch.writeAnswer(Protocol::PAR_STRING); // PAR_STRING
-                            sch.writeNumber(art.getText().size());
-                            smh.writeString(art.getText());
+                            sch.writeNumber(text.size());
+                            smh.writeString(text);
                         }else{
                             sch.writeAnswer(Protocol::ANS_NAK);
                             sch.writeAnswer(Protocol::ERR_NG_DOES_NOT_EXIST);

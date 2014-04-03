@@ -18,7 +18,7 @@ public:
 	bool addArticle(int news_group_id, const string& art_title,
 		const string& art_author, const string& art_text);
 	bool removeArticle(int news_group_id, int article_id);
-	Article InMemory::getArticle(int groupId, int artId) const;
+	//Article InMemory::getArticle(int groupId, int artId) const;
     
 private:
 	vector<NewsGroup> news_groups;
