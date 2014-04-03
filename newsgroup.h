@@ -13,9 +13,10 @@ public:
 	~NewsGroup();
 	size_t size() const;
 	std::string getTitle() const;
-	void addArticle(const Article &article);
+	void addArticle(Article &article);
 	void deleteArticle(int article_id);
 	Article articleAt(int i) const;
+    std::vector<Article> getArticles();
 	int getId();
 	void setId(int newId);
 	int getIndex();

@@ -51,13 +51,29 @@ int main() {
 	for (NewsGroup ng : ngs) {
 		cout << "Name: " << ng.getTitle() << ". ID is: " << ng.getId() << endl;
 	}
+    ngs = db.listNGs();
+    cout<<"size of ngs is "<<ngs.size()<<endl;
+    for(NewsGroup ng : ngs){
+        if(db.addArticle(ng.getId(),"hej0sjsfsjhfsffffffjfjfjfjfjfjfjfjfjjfjfjfjfjffjfjfjfjfjfisjfisfjsifjsifjsifjsifjsifjsfijsfijsfijsfisjfisjfsifjsifjsifjsifjsifjsifjsfijsfisjfisjfsifjsifjsifjsifjsfisjfisjfisfjsifjsifjsifjsifjsfijsfisjfisjfsifjsifjsfijsifjsifjsifj","hej2","hej3")){
+            cout<<"article added to group "<<ng.getId()<<endl;
+        }else{
+            cout<<"article could not be added to group "<<ng.getId()<<endl;
+        }
+    }
+    ngs = db.listNGs();
+    for(NewsGroup ng : ngs){
+        vector<Article> arts = db.listArticles(ng.getId());
+        for(Article a : arts){
+            cout << "hej hittade artikeln "<<"ID: "<<a.getId()<<" "<<"TITLE "<<a.getTitle()<<"AUTHOR: "<<a.getAuthor()<<" TEXT: "<<a.getText()<<endl;
+        }
+    }
 	
-	//-------------- removeNG-test
-	
-	db.removeNG(0);
-	ngs = db.listNGs();
-	cout << "Size should be 1. It is " << ngs.size() << endl;
-	
-	//-------------- 
+    //	//-------------- removeNG-test
+    //
+    //	db.removeNG(0);
+    //	ngs = db.listNGs();
+    //	cout << "Size should be 1. It is " << ngs.size() << endl;
+    //	
+    //	//-------------- 
 	
 }

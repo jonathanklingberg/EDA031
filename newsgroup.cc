@@ -17,7 +17,8 @@ size_t NewsGroup::size() const { return articles.size(); }
 
 string NewsGroup::getTitle() const { return title; }
 
-void NewsGroup::addArticle(const Article &article) {
+void NewsGroup::addArticle(Article &article) {
+    article.setId(articles.size());
 	articles.push_back(article);
 }
 
@@ -25,13 +26,17 @@ void NewsGroup::deleteArticle(int article_id) {
 	size_t i = 0;
 	while (i < articles.size()
 		&& articles.at(i).getId() != article_id) {
-		i++;
+		++i;
 	}
 	if (i < articles.size()) articles.erase(articles.begin() + i);
 }
 
 Article NewsGroup::articleAt(int i) const {
 	return articles[i];
+}
+
+vector<Article> NewsGroup::getArticles(){
+    return articles;
 }
 
 int NewsGroup::getId() { return id; }
