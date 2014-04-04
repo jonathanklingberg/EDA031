@@ -21,6 +21,7 @@ public:
 	void setId(int newId);
 	int getIndex();
 	void setIndex(int newIndex);
+    bool articleExists(int article_id);
     
     std::vector<Article> articles;
 

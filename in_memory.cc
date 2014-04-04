@@ -12,9 +12,9 @@ bool InMemory::createNG(const string& news_group_name) {
     
     //auto it = find_if((news_groups.begin()), news_groups.end(), [&news_group_name](NewsGroup ng) { return ng.getTitle() == news_group_name;});
     for(NewsGroup ng : news_groups) {
-    if(ng.getTitle() == news_group_name && ng.getId() > -1) {
-    	return false;
-    }
+        if(ng.getTitle() == news_group_name && ng.getId() > -1) {
+            return false;
+        }
     }
     NewsGroup news_group(news_group_name);
     news_group.setId(news_groups.size());
@@ -23,10 +23,12 @@ bool InMemory::createNG(const string& news_group_name) {
 }
 
 bool InMemory::removeNG(int news_group_id) {
-    auto it = find_if((news_groups.begin()), news_groups.end(), [&news_group_id](NewsGroup ng){ return ng.getId() != news_group_id;});
-    if(it != news_groups.end()) {
-        news_groups[news_group_id].setId(-1);
-        return true;
+    for(NewsGroup ng : news_groups) {
+        if(ng.getId() == news_group_id) {
+            news_groups[news_group_id].setId(-1);
+            //ng.setId(-1);
+            return true;
+        }
     }
     return false;
 }
@@ -38,50 +40,46 @@ vector<NewsGroup> InMemory::listNGs() const{
             ngs.push_back(ng);
         }
     }
-//	for (size_t i = 0; i < news_groups.size(); ++i) {
-//		NewsGroup ng = news_groups[i];
-//    	if (ng.getId() > -1) {
-//    		ngs.push_back(ng);
-//    	}
-//    }
-	return ngs;
+    return ngs;
 }
 
 vector<Article> InMemory::listArticles(int news_group_id) const {
     cout<<"entered list articles"<<endl;
     vector<Article> res;
     vector<NewsGroup> ngs = listNGs();
-    //auto it = find_if((news_groups.begin()), news_groups.end(), [&news_group_id](NewsGroup ng){ return ng.getId() == news_group_id;});
     for(NewsGroup ng : ngs) {
         cout<<ng.getId()<<" should match "<<news_group_id<<endl;
-    if(ng.getId() == news_group_id) {
-        cout<<"pass id test"<<endl;
-        int size = ngs[news_group_id].size();
-        //int size(size2);
-        cout <<"size: "<<size<<endl;
-        vector<Article> arts;
-        arts.reserve(size);
-        arts = ngs[news_group_id].getArticles();
-        cout<<arts.size()<<endl;
-        for(Article a : arts) {
-            cout << "first article in ng"<<endl;
-            cout<<a.getId()<<endl;
-            if(a.getId() > -1){
-                cout<<"article id was > -1"<<endl;
-                res.push_back(a);
-            }else{
-                cout<<"article id was < -1"<<endl;
-            }
+        if(ng.getId() == news_group_id) {
+            cout<<"pass id test"<<endl;
+            int size = ngs[news_group_id].size();
+            cout <<"size: "<<size<<endl;
+            cout<<"hej här funkar det"<<endl;
+            return ngs[news_group_id].getArticles();
         }
-    }else{
-        cout<<"fail"<<endl;
-    }
     }
     return res;
+
+           // arts = ngs[news_group_id].getArticles();
+//            cout<<arts.size()<<endl;
+//            for(Article a : arts) {
+//                cout << "first article in ng"<<endl;
+//                cout<<a.getId()<<endl;
+//                if(a.getId() > -1){
+//                    cout<<"article id was > -1"<<endl;
+//                    res.push_back(a);
+//                }else{
+//                    cout<<"article id was < -1"<<endl;
+//                }
+//            }
+//        }else{
+//            cout<<"fail"<<endl;
+//        }
+//    }
+//    return res;
 }
 
 bool InMemory::addArticle(int news_group_id, const string& art_title,
-		const string& art_author, const string& art_text) {
+                          const string& art_author, const string& art_text) {
     vector<NewsGroup> ngs = listNGs();
     for(NewsGroup ng : ngs ) {
         if(ng.getId() == news_group_id){
@@ -93,14 +91,17 @@ bool InMemory::addArticle(int news_group_id, const string& art_title,
     return false;
 }
 
-bool InMemory::removeArticle(int news_group_id, int article_id) {   
+bool InMemory::removeArticle(int news_group_id, int article_id) {
 	for (size_t i = 0; i < news_groups.size(); ++i) {
 		if (news_group_id == news_groups[i].getId()) {
+            if(news_groups[i].articleExists(article_id)){
 			news_groups[news_group_id].deleteArticle(article_id);
             cout<<"deleted article"<<endl;
             cout<<"size of articles "<<news_groups[news_group_id].size()<<endl;
 			return true;
 		}
+            return false;
+        }
 	}
 	return false;
 }
