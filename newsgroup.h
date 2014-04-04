@@ -11,7 +11,7 @@ class NewsGroup {
 public:
 	NewsGroup(const std::string &title);
 	~NewsGroup();
-	size_t size() const;
+	int size() const;
 	std::string getTitle() const;
 	void addArticle(Article &article);
 	void deleteArticle(int article_id);

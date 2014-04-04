@@ -56,7 +56,12 @@ vector<Article> InMemory::listArticles(int news_group_id) const {
         cout<<ng.getId()<<" should match "<<news_group_id<<endl;
     if(ng.getId() == news_group_id) {
         cout<<"pass id test"<<endl;
-        vector<Article> arts = ngs[news_group_id].getArticles();
+        int size = ngs[news_group_id].size();
+        //int size(size2);
+        cout <<"size: "<<size<<endl;
+        vector<Article> arts;
+        arts.reserve(size);
+        arts = ngs[news_group_id].getArticles();
         cout<<arts.size()<<endl;
         for(Article a : arts) {
             cout << "first article in ng"<<endl;
@@ -91,8 +96,9 @@ bool InMemory::addArticle(int news_group_id, const string& art_title,
 bool InMemory::removeArticle(int news_group_id, int article_id) {   
 	for (size_t i = 0; i < news_groups.size(); ++i) {
 		if (news_group_id == news_groups[i].getId()) {
-			NewsGroup ng = news_groups[i];
-			ng.deleteArticle(article_id);
+			news_groups[news_group_id].deleteArticle(article_id);
+            cout<<"deleted article"<<endl;
+            cout<<"size of articles "<<news_groups[news_group_id].size()<<endl;
 			return true;
 		}
 	}

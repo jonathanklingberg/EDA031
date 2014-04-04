@@ -9,11 +9,16 @@ NewsGroup::NewsGroup(const string &iTitle) {
 	title = iTitle;
 	id = -1;
 	index = -1;
+    articles.clear();
 }
 
 NewsGroup::~NewsGroup() { }
 
-size_t NewsGroup::size() const { return articles.size(); }
+int NewsGroup::size() const {
+    size_t size = articles.size();
+    int res(size);
+    return res;
+}
 
 string NewsGroup::getTitle() const { return title; }
 
@@ -28,7 +33,10 @@ void NewsGroup::deleteArticle(int article_id) {
 		&& articles.at(i).getId() != article_id) {
 		++i;
 	}
-	if (i < articles.size()) articles.erase(articles.begin() + i);
+	if (i < articles.size()){
+        articles.erase(articles.begin() + i);
+        //articles[i].setId(-1);
+    }
 }
 
 Article NewsGroup::articleAt(int i) const {
@@ -38,6 +46,7 @@ Article NewsGroup::articleAt(int i) const {
 vector<Article> NewsGroup::getArticles(){
     return articles;
 }
+
 
 int NewsGroup::getId() { return id; }
 
