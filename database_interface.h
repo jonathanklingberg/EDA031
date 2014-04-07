@@ -53,9 +53,7 @@ public:
 	 */
 	virtual bool removeArticle(int news_group_id, int article_id) = 0;
     
-    virtual Article getArticle(int groupId, int artId) = 0;
-    
-    virtual bool artExists(int groupId, int artId) = 0;
+
 	 
 };
 

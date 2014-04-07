@@ -189,15 +189,16 @@ int main(int argc, char* argv[]){
                            artId = sch.readNumber();
                            sch.readCommand(); // COM_END
                            sch.writeAnswer(Protocol::ANS_GET_ART);
-                           //artlist = db.listArticles(groupId);
-                        if(!db.artExists(groupId,artId)){
-                            check = false;
-                        }
-                        Article a = db.getArticle(groupId,artId);
-                           string t, ath, text;
+                           artlist = db.listArticles(groupId);
+                           string t, ath, text;                      
+                           for(Article a : artlist) {
+                           	if(a.getId() == artId) {
+                           		check = true;
                            		t = a.getTitle();
                            		ath = a.getAuthor();
                            		text = a.getText();
+                           	}
+                           }
                            if(check){
                            	cout << text << endl;
                             sch.writeAnswer(Protocol::ANS_ACK);
