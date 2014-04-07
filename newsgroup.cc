@@ -34,8 +34,8 @@ void NewsGroup::deleteArticle(int article_id) {
 		++i;
 	}
 	if (i < articles.size()){
-        articles.erase(articles.begin() + i);
-        //articles[i].setId(-1);
+        //articles.erase(articles.begin() + i);
+        articles[i].setId(-1);
     }
 }
 

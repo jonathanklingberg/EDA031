@@ -38,7 +38,7 @@ public:
 	 * Lists all articles in specified newsgroup. Returns array of newsgroups. 
 	 * If no newsgroups exists an empty array is returned.
 	 */
-	virtual std::vector<Article> listArticles(int news_group_id) const = 0;
+	virtual std::vector<Article> listArticles(int news_group_id) = 0;
 	
 	/* 
 	 * Adds new article in specified NewsGroup. Returns false

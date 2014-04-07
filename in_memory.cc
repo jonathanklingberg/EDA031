@@ -45,13 +45,15 @@ vector<NewsGroup> InMemory::listNGs() const{
     return ngs;
 }
 
-vector<Article> InMemory::listArticles(int news_group_id) const {
+vector<Article> InMemory::listArticles(int news_group_id){
     cout<<"entered list articles"<<endl;
     vector<Article> res;
     vector<NewsGroup> ngs = listNGs();
-    for(NewsGroup ng : ngs) {
-        cout<<ng.getId()<<" should match "<<news_group_id<<endl;
-        if(ng.getId() == news_group_id) {
+    //for(NewsGroup ng : ngs) {
+    for(size_t i = 0; i != news_groups.size(); ++i){
+        cout<<news_groups[i].getId()<<" should match "<<news_group_id<<endl;
+        //if(ng.getId() == news_group_id) {
+        if(news_groups[i].getId() == news_group_id){
             cout<<"pass id test"<<endl;
             int size = ngs[news_group_id].size();
             cout <<"size: "<<size<<endl;
