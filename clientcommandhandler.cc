@@ -25,31 +25,24 @@ void ClientCommandHandler::writeString(string s){
 }
 
 map<int, string> ClientCommandHandler::listGroups() {
-    cout<<"jaha lista grupper var begärt"<<endl;
     writeCommand(Protocol::COM_LIST_NG);
     writeCommand(Protocol::COM_END);
     unsigned char start_code = mh.readCode(); //ANS_LIST_NG
     mh.readCode(); //read PAR_NUM
     int size = mh.readNumber(); // N
-    //    checkCode("List groups", Protocol.ANS_LIST_NG, code);
-    //    checkCondition(nbrGroups >= 0, "List groups", "Number of groups < 0");
     map<int, string> groups;
-    cout<<"jag skapade en grupp som ska returneras"<<endl;
     for (int i = 0; i < size; ++i) {
         mh.readCode(); //read PAR_NUM
         int num = mh.readNumber(); //N
         mh.readCode(); //read PAR_STRING
         int n = mh.readNumber(); //N
         groups.insert(make_pair(num, mh.readString(n)));
-        cout<<"jag lade in en grupp i res"<<endl;
     }
     unsigned char end_code = mh.readCode();
-    //    checkCode("List groups", Protocol.ANS_END, code);
     return groups;
 }
 
 bool ClientCommandHandler::createGroup(string title) {
-    cout<<"då var create group begärt för satan"<<endl;
 	writeCommand(Protocol::COM_CREATE_NG);
 	writeCommand(Protocol::PAR_STRING);
 	writeNumber(title.size());
@@ -59,14 +52,11 @@ bool ClientCommandHandler::createGroup(string title) {
 	cout<<start_code<<endl;
 	unsigned char acknowledgement_code = mh.readCode();   //Antingen ANS_ACK eller ANS_NAK
 	unsigned char end_code;
-    cout<<"jag har nu fått lite svar från servern"<<endl;
 	switch(acknowledgement_code) {
 		case Protocol::ANS_ACK:
-            cout<<"ACK FÖR SATANS"<<endl;
 			end_code = mh.readCode();
 			return true;
 		case Protocol::ANS_NAK:
-            cout<<"NAK FÖR SATANS"<<endl;
 		        end_code = mh.readCode();
 			return false;
         default :
@@ -78,12 +68,12 @@ bool ClientCommandHandler::createGroup(string title) {
 bool ClientCommandHandler::deleteGroup(int group_nbr) {
 	writeCommand(Protocol::COM_DELETE_NG);
 	writeCommand(Protocol::PAR_NUM);
-    writeNumber(group_nbr);
+    	writeNumber(group_nbr);
 	writeCommand(Protocol::COM_END);
 	unsigned char start_code = mh.readCode();  //ANS_CREATE_NG	
 	unsigned char acknowledgement_code = mh.readCode();   //Antingen ANS_ACK eller ANS_NAK
-    unsigned char end_code;
-    unsigned char nak_answer_code;
+    	unsigned char end_code;
+    	unsigned char nak_answer_code;
 	switch(acknowledgement_code) {
 		case Protocol::ANS_ACK :
 			end_code = mh.readCode();

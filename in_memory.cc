@@ -10,7 +10,6 @@ InMemory::InMemory(){}
 
 bool InMemory::createNG(const string& news_group_name) {
     
-    //auto it = find_if((news_groups.begin()), news_groups.end(), [&news_group_name](NewsGroup ng) { return ng.getTitle() == news_group_name;});
     for(NewsGroup ng : news_groups) {
         if(ng.getTitle() == news_group_name && ng.getId() > -1) {
             return false;
@@ -23,12 +22,9 @@ bool InMemory::createNG(const string& news_group_name) {
 }
 
 bool InMemory::removeNG(int news_group_id) {
-    //for(NewsGroup ng : news_groups) {
     for(size_t i = 0; i != news_groups.size(); ++i){
-        //if(ng.getId() == news_group_id) {
         if(news_groups[i].getId() == news_group_id){
             news_groups[news_group_id].setId(-1);
-            //ng.setId(-1);
             return true;
         }
     }
@@ -48,47 +44,19 @@ vector<NewsGroup> InMemory::listNGs() const{
 vector<Article> InMemory::listArticles(int news_group_id){
     cout<<"entered list articles"<<endl;
     vector<Article> res;
-    //vector<NewsGroup> ngs = listNGs();
-    //--edit--
  
     vector<NewsGroup> ngs;
     for(NewsGroup ng: news_groups){
         ngs.push_back(ng);
     }
 
-    //--edit--
-    //for(NewsGroup ng : ngs) {
     for(size_t i = 0; i != news_groups.size(); ++i){
-        cout<<news_groups[i].getId()<<" should match "<<news_group_id<<endl;
-        //if(ng.getId() == news_group_id) {
         if(news_groups[i].getId() == news_group_id){
-            cout<<"pass id test"<<endl;
             int size = ngs[news_group_id].size();
-            cout <<"size: "<<size<<endl;
-            cout<<"hej här funkar det"<<endl;
             return ngs[news_group_id].getArticles();
-            //return ngs[ng.getId()].getArticles();
         }
     }
     return res;
-
-           // arts = ngs[news_group_id].getArticles();
-//            cout<<arts.size()<<endl;
-//            for(Article a : arts) {
-//                cout << "first article in ng"<<endl;
-//                cout<<a.getId()<<endl;
-//                if(a.getId() > -1){
-//                    cout<<"article id was > -1"<<endl;
-//                    res.push_back(a);
-//                }else{
-//                    cout<<"article id was < -1"<<endl;
-//                }
-//            }
-//        }else{
-//            cout<<"fail"<<endl;
-//        }
-//    }
-//    return res;
 }
 
 bool InMemory::addArticle(int news_group_id, const string& art_title,

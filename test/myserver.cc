@@ -45,7 +45,6 @@ int main(int argc, char* argv[]){
         MessageHandler smh(*conn.get());
         ServerCommandHandler sch(smh);
 		if (conn != nullptr) {
-            cout<<"something is happening"<<endl;
 			try {
                 unsigned char command = sch.readCommand();
                 unsigned char end_command;
@@ -61,12 +60,9 @@ int main(int argc, char* argv[]){
                 vector<Article> artlist;
                 map<int, string> groups;
                 switch (command) {
-                    case Protocol::COM_LIST_NG: // list newsgroups
-                        cout << "lista grupper"<<endl;
+                    case Protocol::COM_LIST_NG: // list newsgroup
                         end_command = sch.readCommand();
-                        cout << end_command<<endl;
                         newsgroups = db.listNGs();
-                        cout<<newsgroups.size()<<endl;
                         for(size_t i = 0; i < newsgroups.size(); ++i) {
                         	groups.insert(make_pair(newsgroups[i].getId(), newsgroups[i].getTitle()));
                         }
@@ -78,12 +74,8 @@ int main(int argc, char* argv[]){
                     	sch.readCommand(); //PAR_STRING
                     	namesize = sch.readNumber();
                     	groupName = smh.readString(namesize);
-                        cout <<groupName<<endl;
-                    	//int res = db.addGroup(groupId);
                     	end_command = sch.readCommand();
-                    	//db->createNG(groupName);
                         sch.writeAnswer(Protocol::ANS_CREATE_NG);
-                        //auto it = find_if((newsgroups.begin()), newsgroups.end(), [&groupName](NewsGroup ng){ return ng.getTitle() != groupName;});
                         if(db.createNG(groupName)) {
                             sch.writeAnswer(Protocol::ANS_ACK);
                         }else{
@@ -97,8 +89,7 @@ int main(int argc, char* argv[]){
                     case Protocol::COM_DELETE_NG :{ // deletes a specified newsgroup
                         sch.readCommand();
                         groupId = sch.readNumber();
-                        sch.readCommand();
-                        
+                        sch.readCommand();   
                         sch.writeAnswer(Protocol::ANS_DELETE_NG);
                         if(db.removeNG(groupId)){               // Anropa databas metod
                             sch.writeAnswer(Protocol::ANS_ACK);
@@ -116,17 +107,14 @@ int main(int argc, char* argv[]){
                         
                         sch.writeAnswer(Protocol::ANS_LIST_ART);
                         newsgroups = db.listNGs();  //existing groups
-                        //auto it2 = find_if((newsgroups.begin()), newsgroups.end(), [&groupId](NewsGroup ng){ return ng.getId() == groupId;});
                         for(NewsGroup ng : newsgroups) { 
                         	if(ng.getId() == groupId) {
-                        	cout << "com list art kollar om newsgroup finns" <<  endl;
                         		check = true;
                         	}
                         }
                         if(check) {
                             sch.writeAnswer(Protocol::ANS_ACK);
                             vector<Article> articles = db.listArticles(groupId);
-                            cout << articles.size() << endl;      // varför är size=0?
                             sch.writeAnswer(Protocol::PAR_NUM);
                             sch.writeNumber(articles.size());                 //Antal artiklar
                             for(size_t i = 0; i < articles.size(); ++i) {
@@ -155,7 +143,6 @@ int main(int argc, char* argv[]){
                         sch.readCommand();
                         textsize = sch.readNumber();
                         string text = smh.readString(textsize);
-                        //Article art(title, author, text);
                         sch.readCommand(); // COM_END
                         sch.writeAnswer(Protocol::ANS_CREATE_ART);
                         if(db.addArticle(groupId,title,author,text)){               // Anropa databas metod
@@ -200,7 +187,6 @@ int main(int argc, char* argv[]){
                            	}
                            }
                            if(check){
-                           	cout << text << endl;
                             sch.writeAnswer(Protocol::ANS_ACK);
                             sch.writeAnswer(Protocol::PAR_STRING); // PAR_STRING
                             sch.writeNumber(t.size());

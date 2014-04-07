@@ -52,7 +52,6 @@ bool NewsGroup::articleExists(int article_id) {
 }
 
 vector<Article> NewsGroup::getArticles(){
-	cout << "NewsGroup:GetArticles" << endl;
     vector<Article> res;
     for(Article a : articles){
         if(a.getId() > -1){
