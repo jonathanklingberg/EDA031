@@ -23,10 +23,12 @@ bool InMemory::createNG(const string& news_group_name) {
 }
 
 bool InMemory::removeNG(int news_group_id) {
-    for(NewsGroup ng : news_groups) {
-        if(ng.getId() == news_group_id) {
-            //news_groups[news_group_id].setId(-1);
-            ng.setId(-1);
+    //for(NewsGroup ng : news_groups) {
+    for(size_t i = 0; i != news_groups.size(); ++i){
+        //if(ng.getId() == news_group_id) {
+        if(news_groups[i].getId() == news_group_id){
+            news_groups[news_group_id].setId(-1);
+            //ng.setId(-1);
             return true;
         }
     }
@@ -55,6 +57,7 @@ vector<Article> InMemory::listArticles(int news_group_id) const {
             cout <<"size: "<<size<<endl;
             cout<<"hej här funkar det"<<endl;
             return ngs[news_group_id].getArticles();
+            //return ngs[ng.getId()].getArticles();
         }
     }
     return res;
