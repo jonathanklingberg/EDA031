@@ -25,8 +25,8 @@ bool InMemory::createNG(const string& news_group_name) {
 bool InMemory::removeNG(int news_group_id) {
     for(NewsGroup ng : news_groups) {
         if(ng.getId() == news_group_id) {
-            news_groups[news_group_id].setId(-1);
-            //ng.setId(-1);
+            //news_groups[news_group_id].setId(-1);
+            ng.setId(-1);
             return true;
         }
     }
