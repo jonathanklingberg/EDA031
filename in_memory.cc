@@ -48,7 +48,15 @@ vector<NewsGroup> InMemory::listNGs() const{
 vector<Article> InMemory::listArticles(int news_group_id){
     cout<<"entered list articles"<<endl;
     vector<Article> res;
-    vector<NewsGroup> ngs = listNGs();
+    //vector<NewsGroup> ngs = listNGs();
+    //--edit--
+ 
+    vector<NewsGroup> ngs;
+    for(NewsGroup ng: news_groups){
+        ngs.push_back(ng);
+    }
+
+    //--edit--
     //for(NewsGroup ng : ngs) {
     for(size_t i = 0; i != news_groups.size(); ++i){
         cout<<news_groups[i].getId()<<" should match "<<news_group_id<<endl;
