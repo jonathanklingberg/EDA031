@@ -6,19 +6,27 @@
 #include <stdexcept>
 #include <cstdlib>
 #include <map>
+#include <algorithm>
+#include <iterator>
 
 using namespace std;
 
 
 vector<string> Myclient::validate_input(string& param) {
-    vector<string> res;
-    int position;
+    //vector<string> res;
+    //int position;
+    /*
     for(auto i = param.begin(); i != param.end(); i += position) {
         auto pos = param.find(" ");
         position = pos;
         string s = param.substr(*i,pos);
         res.push_back(s);
     }
+    */
+    istringstream iss(param);
+    vector<string> res{istream_iterator<string>{iss},
+         istream_iterator<string>{}};
+    
     return res;
 }
 
@@ -60,23 +68,23 @@ int main(int argc, char* argv[]) {
                     cout << com <<endl;
                 }
             } else if(command == ns.list) {
-                cout<<"jag vill lista grupper tack"<<endl;
+                //cout<<"jag vill lista grupper tack"<<endl;
                 map<int,string> groups = cch.listGroups();
-                cout<<"jaha här var en map"<<endl;
+                //cout<<"jaha här var en map"<<endl;
                 if(groups.size() == 0){
                     cout << "empty"<<endl;
                 }
                 for(auto& g : groups) {
-                    cout<<"hej hej för satans SKRIV UT DÅ"<<endl;
+                    //cout<<"hej hej för satans SKRIV UT DÅ"<<endl;
                     cout << g.first<< " " << g.second<<endl;
                 }
             } else if(command == ns.create_group) {
-                cout<<"skapa grupp tack"<<endl;
+                //cout<<"skapa grupp tack"<<endl;
                 cch.createGroup(parameters);
 //                if(cch.createGroup(parameters) == false) {
 //                    cerr << "newsgroup already exists!"<<endl;
 //                }
-                cout<<"group was created för satans"<<endl;
+                //cout<<"group was created för satans"<<endl;
             } else if(command == ns.delete_group) {
                 int param = stoi(parameters);
                 if(cch.deleteGroup(param) == false) {
