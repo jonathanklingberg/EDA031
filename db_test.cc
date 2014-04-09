@@ -3,7 +3,7 @@
 
 #include "article.h"
 #include "newsgroup.h"
-#include "in_memory.h"
+#include "on_disk.h"
 
 using namespace std;
 
@@ -24,24 +24,24 @@ int main() {
 	cout << "Id: " << art_1.getId() << endl;
 	
 	//InMemory
-	InMemory db;
+	OnDisk db;
 	
 	//----------- createNG-test
 	
 	bool successfull;
 	
 	string ng_name;
-	ng_name = "aftonbladet";
+	ng_name = "Aftonbladet";
 	successfull = db.createNG(ng_name);
-	if (successfull) cout << "nice! aftonbladet created" << endl;
+	if (successfull) cout << "nice! Aftonbladet created" << endl;
 	
 	ng_name = "DN";
 	successfull = db.createNG(ng_name);
 	if (successfull) cout << "nice! DN created" << endl;
 	
-	ng_name = "aftonbladet";
+	ng_name = "Aftonbladet";
 	successfull = db.createNG(ng_name);
-	if (!successfull) cout << "nice! aftonbladet not created" << endl;
+	if (!successfull) cout << "nice! Aftonbladet not created" << endl;
 	
 	//------------- listNGs-test
 	
@@ -60,6 +60,22 @@ int main() {
             cout<<"article could not be added to group "<<ng.getId()<<endl;
         }
     }
+    for(NewsGroup ng : ngs){
+        if(db.addArticle(ng.getId(), "Artikel 2", "Egon Svegon","massa massa masssa massa massa. massa masssa text...!!!=)")){
+            cout<<"article added to group "<<ng.getId()<<endl;
+        }else{
+            cout<<"article could not be added to group "<<ng.getId()<<endl;
+        }
+    }
+    
+    for(NewsGroup ng : ngs){
+        if(db.addArticle(ng.getId(),"Artikel 3", "Jan Banan", "massa massa masssa massa massa. massa masssa text...!!!=)")){
+            cout<<"article added to group "<<ng.getId()<<endl;
+        }else{
+            cout<<"article could not be added to group "<<ng.getId()<<endl;
+        }
+    }
+    
     ngs = db.listNGs();
     for(NewsGroup ng : ngs){
         vector<Article> arts = db.listArticles(ng.getId());
@@ -67,13 +83,14 @@ int main() {
             cout << "hej hittade artikeln "<<"ID: "<<a.getId()<<" "<<"TITLE "<<a.getTitle()<<"AUTHOR: "<<a.getAuthor()<<" TEXT: "<<a.getText()<<endl;
         }
     }
+    
 	
     //	//-------------- removeNG-test
-    //
-    //	db.removeNG(0);
-    //	ngs = db.listNGs();
-    //	cout << "Size should be 1. It is " << ngs.size() << endl;
-    //	
-    //	//-------------- 
+    
+	db.removeNG(0);
+    ngs = db.listNGs();
+    cout << "Size should be 1. It is " << ngs.size() << endl;
+    	
+    //-------------- 
 	
 }
