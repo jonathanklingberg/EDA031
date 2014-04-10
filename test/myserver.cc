@@ -136,12 +136,12 @@ int main(int argc, char* argv[]){
                         groupId = sch.readNumber();   // N
                         sch.readCommand(); // PAR_STRING
                         titlesize = sch.readNumber();
-                        string title = smh.readString(titlesize);   // läser in titel
-                        sch.readCommand();
-                        authorsize = sch.readNumber();
+                        string title = smh.readString(titlesize);
+                        sch.readCommand(); // PAR_STRING
+                        authorsize = sch.readNumber(); // N
                         string author = smh.readString(authorsize);
-                        sch.readCommand();
-                        textsize = sch.readNumber();
+                        sch.readCommand(); // PAR_STRING
+                        textsize = sch.readNumber(); //N
                         string text = smh.readString(textsize);
                         sch.readCommand(); // COM_END
                         sch.writeAnswer(Protocol::ANS_CREATE_ART);

@@ -26,12 +26,12 @@ public:
     const string create_group = "create newsgroup";
     const string delete_group = "delete newsgroup";
     const string list_articles = "list articles";
-    const string create_articles = "create article";
-    const string delete_articles = "delete article";
+    const string create_article = "create article";
+    const string delete_article = "delete article";
     const string get_article = "read article";
     const string help = "-h";
     
-    vector<string> commandlist = {instructions,list,create_group,delete_group,list_articles,create_articles,delete_articles,get_article};
+    vector<string> commandlist = {instructions,list,create_group,delete_group,list_articles,create_article,delete_article,get_article};
     
 };
 

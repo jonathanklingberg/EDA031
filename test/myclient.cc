@@ -13,16 +13,6 @@ using namespace std;
 
 
 vector<string> Myclient::validate_input(string& param) {
-    //vector<string> res;
-    //int position;
-    /*
-    for(auto i = param.begin(); i != param.end(); i += position) {
-        auto pos = param.find(" ");
-        position = pos;
-        string s = param.substr(*i,pos);
-        res.push_back(s);
-    }
-    */
     istringstream iss(param);
     vector<string> res{istream_iterator<string>{iss},
          istream_iterator<string>{}};
@@ -51,7 +41,7 @@ int main(int argc, char* argv[]) {
     MessageHandler mh(conn);
     ClientCommandHandler cch(mh);
     
-	cout << "enter a command, type -h for help: ";
+	cout << "Enter a command, type -h for help: ";
   
     Myclient ns; // creates a Myclient, used to check commands
     while(true) {
@@ -61,60 +51,61 @@ int main(int argc, char* argv[]) {
             auto pos = line.find(" ");
             auto pos2 = line.find(" ",pos+1);
             string command = line.substr(0,pos2);
-            cout << "command: " << command <<endl;
             string parameters = line.substr(pos2+1);
             if(command == ns.help) {
                 for(string com : ns.list_commands()) {
                     cout << com <<endl;
                 }
             } else if(command == ns.list) {
-                //cout<<"jag vill lista grupper tack"<<endl;
                 map<int,string> groups = cch.listGroups();
-                //cout<<"jaha här var en map"<<endl;
                 if(groups.size() == 0){
-                    cout << "empty"<<endl;
+                    cout << "There are no newsgroups!"<<endl;
                 }
                 for(auto& g : groups) {
-                    //cout<<"hej hej för satans SKRIV UT DÅ"<<endl;
                     cout << g.first<< " " << g.second<<endl;
                 }
             } else if(command == ns.create_group) {
-                //cout<<"skapa grupp tack"<<endl;
-                cch.createGroup(parameters);
-//                if(cch.createGroup(parameters) == false) {
-//                    cerr << "newsgroup already exists!"<<endl;
-//                }
-                //cout<<"group was created för satans"<<endl;
+                if(cch.createGroup(parameters) == true) {
+                    cout << "Newsgroup created"<<endl;
+                }else{
+                    cout << "Newsgroup already exists!"<<endl;
+                }
             } else if(command == ns.delete_group) {
                 int param = stoi(parameters);
                 if(cch.deleteGroup(param) == false) {
-                    cerr << "newsgroup does not exist!" <<endl;
+                    cerr << "Newsgroup does not exist!" <<endl;
                 }
             } else if(command == ns.list_articles) {
                 int param = stoi(parameters);
                 map<int,string> arts = cch.listArts(param);
+                if(arts.empty()){
+                    cout << "There are no articles in newsgroup!"<<endl;
+                }
                 for(auto& a : arts) {
                     cout << a.first<<" "<<a.second<<endl;
                 }
-            } else if(command == ns.create_articles) {
+            } else if(command == ns.create_article) {
                 vector<string> v = ns.validate_input(parameters);
                 if(v.size() != 4) {
-                    cerr << "invalid input"<<endl;
+                    cout << "Invalid input!"<<endl;
                 }
                 int id = stoi(v[0]);
-                if(cch.createArt(id,v[1],v[2],v[3]) == false) {
-                    cerr<< "newsgroup does not exist!"<<endl;
+                if(cch.createArt(id,v[1],v[2],v[3])) {
+                    cout << "Article created"<<endl;
+                }else{
+                cout<< "Newsgroup does not exist!"<<endl;
                 }
-                
-            } else if(command == ns.delete_articles) {
+            } else if(command == ns.delete_article) {
                 vector<string> v = ns.validate_input(parameters);
                 if(v.size() != 2) {
-                    cerr << "invalid input"<<endl;
+                    cerr << "Invalid input"<<endl;
                 }
                 int id = stoi(v[0]);
                 int art_nbr = stoi(v[1]);
-                if(cch.deleteArt(id,art_nbr) == false) {
-                    cerr<<"Article does not exist!"<<endl;
+                if(cch.deleteArt(id,art_nbr)) {
+                    cout << "Article was deleted"<<endl;
+                }else{
+                    cout<<"Article does not exist!"<<endl;
                 }
                 
             } else if(command == ns.get_article) {
@@ -128,11 +119,11 @@ int main(int argc, char* argv[]) {
                 cout<< res[0]<<" "<<res[1]<<endl;
                 
             } else {
-                cout << "error, command does not exist"<<endl;
+                cout << "Error, command does not exist!"<<endl;
                 exit(1);
             }
             }catch(ConnectionClosedException&) {
-               cerr << " no reply from server. Quitting." << endl;
+               cerr << "No reply from server. Quitting." << endl;
                 exit(1);
             }
         }

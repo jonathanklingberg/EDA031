@@ -49,7 +49,6 @@ bool ClientCommandHandler::createGroup(string title) {
     writeString(title);
 	writeCommand(Protocol::COM_END);
 	unsigned char start_code = mh.readCode();  //ANS_CREATE_NG
-	cout<<start_code<<endl;
 	unsigned char acknowledgement_code = mh.readCode();   //Antingen ANS_ACK eller ANS_NAK
 	unsigned char end_code;
 	switch(acknowledgement_code) {
@@ -123,10 +122,13 @@ bool ClientCommandHandler::createArt(int group_nbr, string title, string auth, s
     writeCommand(Protocol::PAR_NUM);
     writeNumber(group_nbr);
     writeCommand(Protocol::PAR_STRING);
+    writeNumber(title.size());
     writeString(title);
     writeCommand(Protocol::PAR_STRING);
+    writeNumber(auth.size());
     writeString(auth);
     writeCommand(Protocol::PAR_STRING);
+    writeNumber(text.size());
     writeString(text);
     writeCommand(Protocol::COM_END);
     unsigned char start_code = mh.readCode(); //ANS_CREATE_ART
@@ -150,6 +152,7 @@ bool ClientCommandHandler::deleteArt(int group_nbr,int art_nbr) {
     writeNumber(group_nbr);
     writeCommand(Protocol::PAR_NUM);
     writeNumber(art_nbr);
+    writeCommand(Protocol::COM_END);
     unsigned char start_code = mh.readCode(); //ANS_DELETE_ART
     unsigned char acknowledgement_code = mh.readCode();   //Antingen ANS_ACK eller ANS_NAK
     unsigned char end_code;

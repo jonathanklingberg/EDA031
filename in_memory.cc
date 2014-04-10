@@ -42,7 +42,6 @@ vector<NewsGroup> InMemory::listNGs() const{
 }
 
 vector<Article> InMemory::listArticles(int news_group_id){
-    cout<<"entered list articles"<<endl;
     vector<Article> res;
  
     vector<NewsGroup> ngs;
@@ -52,7 +51,6 @@ vector<Article> InMemory::listArticles(int news_group_id){
 
     for(size_t i = 0; i != news_groups.size(); ++i){
         if(news_groups[i].getId() == news_group_id){
-            int size = ngs[news_group_id].size();
             return ngs[news_group_id].getArticles();
         }
     }
@@ -77,8 +75,6 @@ bool InMemory::removeArticle(int news_group_id, int article_id) {
 		if (news_group_id == news_groups[i].getId()) {
             if(news_groups[i].articleExists(article_id)){
 			news_groups[news_group_id].deleteArticle(article_id);
-            cout<<"deleted article"<<endl;
-            cout<<"size of articles "<<news_groups[news_group_id].size()<<endl;
 			return true;
 		}
             return false;
@@ -87,16 +83,6 @@ bool InMemory::removeArticle(int news_group_id, int article_id) {
 	return false;
 }
 
-//
-//Article InMemory::getArticle(int groupId, int artId) const {
-//
-//	vector<Article> arts = listArticles(groupId);
-//		for(Article a : arts) {
-//		 	if(a.getId() == artId) {
-//				return a;
-//			}
-//		}
-//	}
 
 
 
