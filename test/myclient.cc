@@ -26,7 +26,6 @@ vector<string> Myclient::validate_input(string& param) {
     istringstream iss(param);
     vector<string> res{istream_iterator<string>{iss},
          istream_iterator<string>{}};
-    
     return res;
 }
 
@@ -62,6 +61,7 @@ int main(int argc, char* argv[]) {
             auto pos = line.find(" ");
             auto pos2 = line.find(" ",pos+1);
             string command = line.substr(0,pos2);
+            cout << "command: " << command <<endl;
             string parameters = line.substr(pos2+1);
             if(command == ns.help) {
                 for(string com : ns.list_commands()) {
