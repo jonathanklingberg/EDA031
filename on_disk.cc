@@ -115,13 +115,13 @@ bool OnDisk::addArticle(int news_group_id, const string& art_title,
 	vector<Article> new_arts;
 	Article tmp(art_title, art_author, art_text);
 	for (Article art : all_arts) {
-		Article& cur = art;
 		cout << "OnDisk::addArticle  " << art.getId() << " " << art.getTitle() << endl;
 		if (!art.getTitle().compare("<next_id>")) {
 			tmp.setId(art.getId());
+			new_arts.push_back(tmp);
 		} else {
 			cout << "OnDisk::addArticle << inne i while" << endl;
-			new_arts.push_back(cur);
+			new_arts.push_back(art);
 		}
 	}
 	Article next_id("<next_id>", "n/a", "n/a");
@@ -133,7 +133,27 @@ bool OnDisk::addArticle(int news_group_id, const string& art_title,
 }
 
 bool OnDisk::removeArticle(int news_group_id, int article_id) {
-
+	bool exist = false;
+	for (Article art : listArticles(news_group_id)) {
+		if (art.getId() == article_id) {
+			exist = true;
+		}
+	}
+	if (!exist) return false;
+	cout << "remocveArt " << endl;
+	string path = to_string(news_group_id);
+	vector<Article> all_arts = listAllArticleIds(path);
+	vector<Article> new_arts;
+	Article tmp("<deleted_art>", "n/a", "n/a");
+	for (Article art : all_arts) {
+		if (art.getId() == article_id) {
+			tmp.setId(art.getId());
+			new_arts.push_back(tmp);
+		}
+		else new_arts.push_back(art);
+	}
+	writeToArticleList(new_arts, path);
+	return true;
 }
 
 //---- Help-functions ----
