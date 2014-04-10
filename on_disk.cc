@@ -239,7 +239,6 @@ Article OnDisk::readArticle(string& path, int file_id) const {
 		}
 	}
 	
-	
 	Article art(s_title, s_author, s_text);
 	art.setId(file_id);
 	infile.close();
