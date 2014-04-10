@@ -72,7 +72,9 @@ int main(int argc, char* argv[]) {
                 }
             } else if(command == ns.delete_group) {
                 int param = stoi(parameters);
-                if(cch.deleteGroup(param) == false) {
+                if(cch.deleteGroup(param)) {
+                    cout<<"Newsgroup deleted"<<endl;
+                }else{
                     cerr << "Newsgroup does not exist!" <<endl;
                 }
             } else if(command == ns.list_articles) {
@@ -127,7 +129,10 @@ int main(int argc, char* argv[]) {
                 cout<<endl;
             } else {
                 cout << "Error, command does not exist!"<<endl;
-                exit(1);
+                cout << "Please try again"<<endl;
+                for(string com : ns.list_commands()) {
+                    cout << com <<endl;
+                }
             }
             }catch(ConnectionClosedException&) {
                cerr << "No reply from server. Quitting." << endl;

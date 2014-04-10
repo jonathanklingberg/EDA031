@@ -27,8 +27,6 @@ all: $(PROGS)
 # The dependency on libclientserver.a is not defined.
 myserver: myserver.o  
 myclient: myclient.o
-#testprotocol: testprotocol.o
-#newsclient: newsclient.o
 
 # Phony targets
 .PHONY: all clean
