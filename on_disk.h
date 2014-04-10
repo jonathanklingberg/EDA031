@@ -25,6 +25,7 @@ private:
 	int getNextIndex();
 	vector<NewsGroup> listAllIds() const;
 	vector<Article> listAllArticleIds(string& path) const;
+	Article readArticle(string& path, int file_id) const;
 	void writeToNGList(vector<NewsGroup>& ngs);
 	void writeToArticleList(vector<Article>& arts, string& path);
 	void writeToArticle(Article& art, string& path);

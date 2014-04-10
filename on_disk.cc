@@ -99,12 +99,10 @@ vector<Article> OnDisk::listArticles(int news_group_id) {
 	vector<Article> arts;
 	for(Article art : all_arts) {
 		string title = art.getTitle();
-		if (title.compare("<deleted_art>") && title.compare("<next_id>")) arts.push_back(art);		
+		if (title.compare("<deleted_art>") && title.compare("<next_id>")) {
+			arts.push_back(readArticle(path, art.getId()));
+		}
 	}
-	//TODO: läs in hela artiklarna
-	// test
-	for(Article art : arts) cout << "OnDisk::listArticles " << art.getId() << "  " << art.getTitle() << endl;
-	//
 	return arts;
 }
 
@@ -174,7 +172,8 @@ vector<NewsGroup> OnDisk::listAllIds() const {
 			stringstream  stream(sLine);
 			string  s_id, ng_name;
 			stream >> s_id;
-			stream >> ng_name;
+			getline(stream, ng_name);
+			ng_name = ng_name.substr(1);
 			cout << "OnDisk::listAllIds > id: " << s_id << ", title: " << ng_name << endl; 
 			NewsGroup ng(ng_name);
 			int id = atoi(s_id.c_str());
@@ -201,8 +200,11 @@ vector<Article> OnDisk::listAllArticleIds(string& path) const {
 			stringstream  stream(sLine);
 			string  s_id, s_title;
 			stream >> s_id;
-			stream >> s_title;
-			cout << "OnDisk::listArticleAllIds > id: " << s_id << ", title: " << s_id << endl; 
+			
+			getline(stream, s_title);
+			s_title = s_title.substr(1);
+			
+			cout << "OnDisk::listArticleAllIds > id: " << s_id << ", title: " << s_title << endl; 
 			Article art(s_title, bull, bull);
 			int id = atoi(s_id.c_str());
 			art.setId(id);
@@ -212,6 +214,36 @@ vector<Article> OnDisk::listAllArticleIds(string& path) const {
 	}
 	infile.close();
 	return arts;
+}
+
+Article OnDisk::readArticle(string& path, int file_id) const {
+	string art_path = "db/";
+	art_path += path;
+	art_path += "/";
+	art_path += to_string(file_id);
+	string s_title = "n/a", s_author = "n/a", s_text = "n/a";
+	cout << "OnDisk::readArticle() << path: " << art_path << endl;
+	
+	ifstream infile(art_path);
+	if (infile.good()) {
+		cout << "OnDisk::readArticle() << hittade article" << endl;
+		string sline;
+		
+		getline(infile, s_title);
+		getline(infile, s_author);
+		getline(infile, s_text);
+		while(getline(infile, sline)) {
+			s_text += "\n";
+			s_text += sline;
+			
+		}
+	}
+	
+	
+	Article art(s_title, s_author, s_text);
+	art.setId(file_id);
+	infile.close();
+	return art;
 }
 
 void OnDisk::writeToNGList(vector<NewsGroup>& ngs) {
