@@ -8,6 +8,7 @@
 #include "newsgroup.h"
 #include "database_interface.h"
 #include "article.h"
+#include "on_disk.h"
 
 #include <algorithm>
 #include <memory>
@@ -39,7 +40,8 @@ int main(int argc, char* argv[]){
 		cerr << "Server initialization error." << endl;
 		exit(1);
 	}
-	InMemory db;  // CREATE A DB HERE : Database db();
+	//InMemory db;  // CREATE A DB HERE : Database db();
+    OnDisk db;
 	while (true) {
         auto conn = server.waitForActivity();
         MessageHandler smh(*conn.get());
