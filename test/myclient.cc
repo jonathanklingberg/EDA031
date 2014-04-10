@@ -86,11 +86,16 @@ int main(int argc, char* argv[]) {
                 }
             } else if(command == ns.create_article) {
                 vector<string> v = ns.validate_input(parameters);
-                if(v.size() != 4) {
+                if(v.size() < 4) {
                     cout << "Invalid input!"<<endl;
                 }
                 int id = stoi(v[0]);
-                if(cch.createArt(id,v[1],v[2],v[3])) {
+                string text;
+                for(size_t i = 3; i < v.size(); ++i){
+                    text +=v[i];
+                    text +=" ";
+                }
+                if(cch.createArt(id,v[1],v[2],text)) {
                     cout << "Article created"<<endl;
                 }else{
                 cout<< "Newsgroup does not exist!"<<endl;
@@ -110,14 +115,16 @@ int main(int argc, char* argv[]) {
                 
             } else if(command == ns.get_article) {
                 vector<string> v = ns.validate_input(parameters);
-                if(v.size() != 2) {
+                if(v.size() < 2) {
                     cerr<<"Invalid input!"<<endl;
                 }
                 int id = stoi(v[0]);
                 int id2 = stoi(v[1]);
                 vector<string> res = cch.getArt(id,id2);
-                cout<< res[0]<<" "<<res[1]<<endl;
-                
+                for(size_t i = 0; i < res.size(); ++i) {
+                cout<< res[i]<<" ";
+                }
+                cout<<endl;
             } else {
                 cout << "Error, command does not exist!"<<endl;
                 exit(1);

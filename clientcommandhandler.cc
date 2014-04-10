@@ -174,6 +174,7 @@ vector<string> ClientCommandHandler::getArt(int group_nbr,int art_nbr) {
     writeNumber(group_nbr);
     writeCommand(Protocol::PAR_NUM);
     writeNumber(art_nbr);
+    writeCommand(Protocol::COM_END);
     unsigned char start_code = mh.readCode(); //ANS_GET_ART
     unsigned char acknowledgement_code = mh.readCode();   //Antingen ANS_ACK eller ANS_NAK
     unsigned char end_code;
