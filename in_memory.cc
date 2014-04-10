@@ -6,7 +6,10 @@
 
 using namespace std;
 
-InMemory::InMemory(){}
+InMemory::InMemory(){
+	NewsGroup zero("<deleted>");
+	news_groups.push_back(zero);
+}
 
 bool InMemory::createNG(const string& news_group_name) {
     

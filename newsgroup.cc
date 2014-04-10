@@ -10,6 +10,8 @@ NewsGroup::NewsGroup(const string &iTitle) {
 	title = iTitle;
 	id = -1;
 	index = -1;
+	Article zero("<deleted>","n/a","n/a");
+	articles.push_back(zero);
 }
 
 NewsGroup::~NewsGroup() {}

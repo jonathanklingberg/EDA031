@@ -17,7 +17,7 @@ OnDisk::OnDisk(){
 	string ng = "db/newsgroups";
 	if(!mkdir(root.c_str(),0755)) {
 		ofstream file(ng);
-		file << "0 <next_id>" << endl;
+		file << "1 <next_id>" << endl;
 		file.close();
 	}
 }
@@ -48,7 +48,7 @@ bool OnDisk::createNG(const string& news_group_name) {
 	if(!mkdir(path.c_str(),0755)) {
 		path += "/articles";
 		ofstream file(path);
-		file << "0 <next_id>" << endl;
+		file << "1 <next_id>" << endl;
 		file.close();
 	}
 	return true;
