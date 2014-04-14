@@ -94,9 +94,14 @@ vector<NewsGroup> OnDisk::listNGs() const {
 }
 
 vector<Article> OnDisk::listArticles(int news_group_id) {
+	vector<Article> arts;
+	vector<NewsGroup> ngs = listNGs();
+	bool exist = false;
+	for (NewsGroup ng : ngs) if (ng.getId() == news_group_id) exist = true;
+	if (!exist) return arts;
 	string path = to_string(news_group_id);
 	vector<Article> all_arts = listAllArticleIds(path);
-	vector<Article> arts;
+	
 	for(Article art : all_arts) {
 		string title = art.getTitle();
 		if (title.compare("<deleted_art>") && title.compare("<next_id>")) {
