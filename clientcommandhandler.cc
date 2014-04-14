@@ -51,11 +51,13 @@ bool ClientCommandHandler::createGroup(string title) {
 	unsigned char start_code = mh.readCode();  //ANS_CREATE_NG
 	unsigned char acknowledgement_code = mh.readCode();   //Antingen ANS_ACK eller ANS_NAK
 	unsigned char end_code;
+    unsigned char error;
 	switch(acknowledgement_code) {
 		case Protocol::ANS_ACK:
 			end_code = mh.readCode();
 			return true;
 		case Protocol::ANS_NAK:
+                error = mh.readCode();
 		        end_code = mh.readCode();
 			return false;
         default :

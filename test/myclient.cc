@@ -69,7 +69,7 @@ int main(int argc, char* argv[]) {
                     cout << com <<endl;
                 }
             } else if(command == ns.create_group && !parameters.empty()) {
-                if(cch.createGroup(parameters) == true) {
+                if(cch.createGroup(parameters)) {
                     cout << "Newsgroup created"<<endl;
                 }else{
                     cout << "Newsgroup already exists!"<<endl;
