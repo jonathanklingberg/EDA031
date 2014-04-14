@@ -19,8 +19,6 @@ public:
     std::vector<Article> getArticles();
 	int getId();
 	void setId(int newId);
-	int getIndex();
-	void setIndex(int newIndex);
     bool articleExists(int article_id);
     
     std::vector<Article> articles;
@@ -28,7 +26,6 @@ public:
 private:
 	std::string title;
 	int id;
-	int index;
 	
 };
 

@@ -9,7 +9,6 @@ using namespace std;
 NewsGroup::NewsGroup(const string &iTitle) { 
 	title = iTitle;
 	id = -1;
-	index = -1;
 	Article zero("<deleted>","n/a","n/a");
 	articles.push_back(zero);
 }
@@ -66,7 +65,3 @@ vector<Article> NewsGroup::getArticles(){
 int NewsGroup::getId() { return id; }
 
 void NewsGroup::setId(int newId) { id = newId; }
-
-int NewsGroup::getIndex() { return index; }
-
-void NewsGroup::setIndex(int newIndex) { index = newIndex; }

@@ -13,15 +13,12 @@ public:
 	std::string getText() const;
 	int getId() const;
 	void setId(const int newId);
-	int getIndex() const;
-	void setIndex(const int newIndex);
 
 private:
 	std::string title;
 	std::string author;
 	std::string text;
 	int id;
-	int index;
 
 };
 
