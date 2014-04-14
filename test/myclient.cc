@@ -1,5 +1,4 @@
 #include "myclient.h"
-#include "protocol.h"
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -15,7 +14,7 @@ using namespace std;
 vector<string> Myclient::validate_input(string& param) {
     istringstream iss(param);
     vector<string> res{istream_iterator<string>{iss},
-         istream_iterator<string>{}};
+        istream_iterator<string>{}};
     return res;
 }
 
@@ -42,42 +41,47 @@ int main(int argc, char* argv[]) {
     ClientCommandHandler cch(mh);
     
 	cout << "Enter a command, type -h for help: ";
-  
+    
     Myclient ns; // creates a Myclient, used to check commands
     while(true) {
         string line;
         while(getline(cin,line)) {
             try {
-            auto pos = line.find(" ");
-            auto pos2 = line.find(" ",pos+1);
-            string command = line.substr(0,pos2);
-            string parameters = line.substr(pos2+1);
-            if(command == ns.help) {
+                auto pos = line.find(" ");
+                auto pos2 = line.find(" ",pos+1);
+                string command = line.substr(0,pos2);
+                string parameters;
+                if(line.size() == command.size()){
+                    parameters = "";
+                }else{
+                    parameters = line.substr(pos2+1);
+                }
+                if(command == ns.list && parameters.empty()) {
+                    map<int,string> groups = cch.listGroups();
+                    if(groups.size() == 0){
+                        cout << "There are no newsgroups!"<<endl;
+                    }
+                    for(auto& g : groups) {
+                        cout << g.first<< " " << g.second<<endl;
+                    }
+            } else if(command == ns.help && parameters.empty()) {
                 for(string com : ns.list_commands()) {
                     cout << com <<endl;
                 }
-            } else if(command == ns.list) {
-                map<int,string> groups = cch.listGroups();
-                if(groups.size() == 0){
-                    cout << "There are no newsgroups!"<<endl;
-                }
-                for(auto& g : groups) {
-                    cout << g.first<< " " << g.second<<endl;
-                }
-            } else if(command == ns.create_group) {
+            } else if(command == ns.create_group && !parameters.empty()) {
                 if(cch.createGroup(parameters) == true) {
                     cout << "Newsgroup created"<<endl;
                 }else{
                     cout << "Newsgroup already exists!"<<endl;
                 }
-            } else if(command == ns.delete_group) {
+            } else if(command == ns.delete_group && !parameters.empty()) {
                 int param = stoi(parameters);
                 if(cch.deleteGroup(param)) {
                     cout<<"Newsgroup deleted"<<endl;
                 }else{
                     cerr << "Newsgroup does not exist!" <<endl;
                 }
-            } else if(command == ns.list_articles) {
+            } else if(command == ns.list_articles && !parameters.empty()) {
                 int param = stoi(parameters);
                 map<int,string> arts = cch.listArts(param);
                 if(arts.empty()){
@@ -86,7 +90,7 @@ int main(int argc, char* argv[]) {
                 for(auto& a : arts) {
                     cout << a.first<<" "<<a.second<<endl;
                 }
-            } else if(command == ns.create_article) {
+            } else if(command == ns.create_article && !parameters.empty()) {
                 vector<string> v = ns.validate_input(parameters);
                 if(v.size() < 4) {
                     cout << "Invalid input!"<<endl;
@@ -100,9 +104,9 @@ int main(int argc, char* argv[]) {
                 if(cch.createArt(id,v[1],v[2],text)) {
                     cout << "Article created"<<endl;
                 }else{
-                cout<< "Newsgroup does not exist!"<<endl;
+                    cout<< "Newsgroup does not exist!"<<endl;
                 }
-            } else if(command == ns.delete_article) {
+            } else if(command == ns.delete_article && !parameters.empty()) {
                 vector<string> v = ns.validate_input(parameters);
                 if(v.size() != 2) {
                     cerr << "Invalid input"<<endl;
@@ -115,7 +119,7 @@ int main(int argc, char* argv[]) {
                     cout<<"Article does not exist!"<<endl;
                 }
                 
-            } else if(command == ns.get_article) {
+            } else if(command == ns.get_article && !parameters.empty()) {
                 vector<string> v = ns.validate_input(parameters);
                 if(v.size() < 2) {
                     cerr<<"Invalid input!"<<endl;
@@ -123,8 +127,11 @@ int main(int argc, char* argv[]) {
                 int id = stoi(v[0]);
                 int id2 = stoi(v[1]);
                 vector<string> res = cch.getArt(id,id2);
+                if(res.empty()){
+                    cout<<"Article does not exist!"<<endl;
+                }
                 for(size_t i = 0; i < res.size(); ++i) {
-                cout<< res[i]<<" ";
+                    cout<< res[i]<<" ";
                 }
                 cout<<endl;
             } else {
@@ -134,11 +141,11 @@ int main(int argc, char* argv[]) {
                     cout << com <<endl;
                 }
             }
-            }catch(ConnectionClosedException&) {
-               cerr << "No reply from server. Quitting." << endl;
-                exit(1);
-            }
+        }catch(ConnectionClosedException&) {
+            cerr << "No reply from server. Quitting." << endl;
+            exit(1);
         }
     }
+}
 }
 
