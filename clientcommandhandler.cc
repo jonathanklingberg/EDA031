@@ -75,11 +75,13 @@ bool ClientCommandHandler::deleteGroup(int group_nbr) {
 	unsigned char acknowledgement_code = mh.readCode();   //Antingen ANS_ACK eller ANS_NAK
     	unsigned char end_code;
     	unsigned char nak_answer_code;
+    unsigned char error;
 	switch(acknowledgement_code) {
 		case Protocol::ANS_ACK :
 			end_code = mh.readCode();
 			return true;
 		case Protocol::ANS_NAK :
+            error = mh.readCode();
 			end_code = mh.readCode();
 			return false;
         default :
@@ -95,6 +97,7 @@ map<int, string> ClientCommandHandler::listArts(int group_nbr) {
     unsigned char start_code = mh.readCode(); //ANS_LIST_ART
     unsigned char acknowledgement_code = mh.readCode();   //Antingen ANS_ACK eller ANS_NAK
     unsigned char end_code;
+    unsigned char error;
     map<int,string> res;
     switch(acknowledgement_code) {
 		case Protocol::ANS_ACK :{
@@ -112,6 +115,7 @@ map<int, string> ClientCommandHandler::listArts(int group_nbr) {
         }
             break;
         case Protocol::ANS_NAK :{
+            error = mh.readCode();
             end_code = mh.readCode();
             return res;
         }
@@ -136,11 +140,13 @@ bool ClientCommandHandler::createArt(int group_nbr, string title, string auth, s
     unsigned char start_code = mh.readCode(); //ANS_CREATE_ART
     unsigned char acknowledgement_code = mh.readCode();   //Antingen ANS_ACK eller ANS_NAK
     unsigned char end_code;
+    unsigned char error;
     switch(acknowledgement_code) {
 		case Protocol::ANS_ACK:
 			end_code = mh.readCode();
 			return true;
 		case Protocol::ANS_NAK:
+            error = mh.readCode();
             end_code = mh.readCode();
 			return false;
         default :
@@ -158,11 +164,13 @@ bool ClientCommandHandler::deleteArt(int group_nbr,int art_nbr) {
     unsigned char start_code = mh.readCode(); //ANS_DELETE_ART
     unsigned char acknowledgement_code = mh.readCode();   //Antingen ANS_ACK eller ANS_NAK
     unsigned char end_code;
+    unsigned char error;
     switch(acknowledgement_code) {
 		case Protocol::ANS_ACK:
 			end_code = mh.readCode();
 			return true;
 		case Protocol::ANS_NAK:
+            error = mh.readCode();
             end_code = mh.readCode();
 			return false;
         default :
@@ -180,6 +188,7 @@ vector<string> ClientCommandHandler::getArt(int group_nbr,int art_nbr) {
     unsigned char start_code = mh.readCode(); //ANS_GET_ART
     unsigned char acknowledgement_code = mh.readCode();   //Antingen ANS_ACK eller ANS_NAK
     unsigned char end_code;
+    unsigned char error;
     vector<string> res;
     switch(acknowledgement_code) {
 		case Protocol::ANS_ACK:
@@ -191,6 +200,7 @@ vector<string> ClientCommandHandler::getArt(int group_nbr,int art_nbr) {
 			end_code = mh.readCode();
 			return res;
 		case Protocol::ANS_NAK:
+            error = mh.readCode();
             end_code = mh.readCode();
 			return res;
     }
