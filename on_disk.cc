@@ -25,16 +25,13 @@ OnDisk::OnDisk(){
 bool OnDisk::createNG(const string& news_group_name) {
 	NewsGroup tmp(news_group_name);
 	for (NewsGroup ng : listNGs()) {
-		cout << "createNG compare: " << ng.getTitle() << " against " << news_group_name << endl;
 		if (!ng.getTitle().compare(news_group_name)) {
-			cout << "should not be here" << endl;
 			return false;
 		}
 	}
 	vector<NewsGroup> all_ngs = listAllIds();
 	vector<NewsGroup> new_ngs;
 	for (NewsGroup ng : all_ngs) {
-		cout << "OnDisk::createNG  " << ng.getId() << " " << ng.getTitle() << endl;
 		if (!ng.getTitle().compare("<next_id>")) tmp.setId(ng.getId());
 		else new_ngs.push_back(ng);
 	}
@@ -62,7 +59,6 @@ bool OnDisk::removeNG(int news_group_id) {
 		}
 	}
 	if (!exist) return false;
-	cout << "remocveNG " << endl;
 	vector<NewsGroup> all_ngs = listAllIds();
 	vector<NewsGroup> new_ngs;
 	NewsGroup tmp("<deleted_ng>");
@@ -87,9 +83,6 @@ vector<NewsGroup> OnDisk::listNGs() const {
 		string title = ng.getTitle();
 		if (title.compare("<deleted_ng>") && title.compare("<next_id>")) ngs.push_back(ng);		
 	}
-	// test
-	for(NewsGroup ng : ngs) cout << "OnDisk::listNGs " << ng.getId() << "  " << ng.getTitle() << endl;
-	//
 	return ngs;
 }
 
@@ -118,12 +111,10 @@ bool OnDisk::addArticle(int news_group_id, const string& art_title,
 	vector<Article> new_arts;
 	Article tmp(art_title, art_author, art_text);
 	for (Article art : all_arts) {
-		cout << "OnDisk::addArticle  " << art.getId() << " " << art.getTitle() << endl;
 		if (!art.getTitle().compare("<next_id>")) {
 			tmp.setId(art.getId());
 			new_arts.push_back(tmp);
 		} else {
-			cout << "OnDisk::addArticle << inne i while" << endl;
 			new_arts.push_back(art);
 		}
 	}
@@ -143,7 +134,6 @@ bool OnDisk::removeArticle(int news_group_id, int article_id) {
 		}
 	}
 	if (!exist) return false;
-	cout << "remocveArt " << endl;
 	string path = to_string(news_group_id);
 	vector<Article> all_arts = listAllArticleIds(path);
 	vector<Article> new_arts;
@@ -171,15 +161,13 @@ vector<NewsGroup> OnDisk::listAllIds() const {
 	vector<NewsGroup> ngs;
 	ifstream infile("db/newsgroups");
 	if (infile.good()) {
-		cout << "OnDisk::listAllIds() << hittade db/newsgroups" << endl; 
 		string sLine;
 		while(getline(infile, sLine)) {
 			stringstream  stream(sLine);
 			string  s_id, ng_name;
 			stream >> s_id;
 			getline(stream, ng_name);
-			ng_name = ng_name.substr(1);
-			cout << "OnDisk::listAllIds > id: " << s_id << ", title: " << ng_name << endl; 
+			ng_name = ng_name.substr(1); 
 			NewsGroup ng(ng_name);
 			int id = atoi(s_id.c_str());
 			ng.setId(id);
@@ -199,7 +187,6 @@ vector<Article> OnDisk::listAllArticleIds(string& path) const {
 	art_path += "/articles";
 	ifstream infile(art_path);
 	if (infile.good()) {
-		cout << "OnDisk::listAllArtIds() << hittade articles" << endl; 
 		string sLine;
 		while(getline(infile, sLine)) {
 			stringstream  stream(sLine);
@@ -209,7 +196,6 @@ vector<Article> OnDisk::listAllArticleIds(string& path) const {
 			getline(stream, s_title);
 			s_title = s_title.substr(1);
 			
-			cout << "OnDisk::listArticleAllIds > id: " << s_id << ", title: " << s_title << endl; 
 			Article art(s_title, bull, bull);
 			int id = atoi(s_id.c_str());
 			art.setId(id);
@@ -227,11 +213,9 @@ Article OnDisk::readArticle(string& path, int file_id) const {
 	art_path += "/";
 	art_path += to_string(file_id);
 	string s_title = "n/a", s_author = "n/a", s_text = "n/a";
-	cout << "OnDisk::readArticle() << path: " << art_path << endl;
 	
 	ifstream infile(art_path);
 	if (infile.good()) {
-		cout << "OnDisk::readArticle() << hittade article" << endl;
 		string sline;
 		
 		getline(infile, s_title);
@@ -254,7 +238,6 @@ void OnDisk::writeToNGList(vector<NewsGroup>& ngs) {
 	string ng_path = "db/newsgroups"; 
 	ofstream file(ng_path);
 	for (NewsGroup ng : ngs) {
-		cout << "OnDisk::writeToNgList > id: " << ng.getId() << ", title: " << ng.getTitle() << endl;
 		file << ng.getId() << " " << ng.getTitle() << endl;
 	}
 	file.close();
