@@ -16,7 +16,7 @@ CXXFLAGS += -std=c++11
 #CXXFLAGS += -stdlib=libc++
 #LDFLAGS += -stdlib=libc++
 
-all: libclientserver.a
+all: libclientserver.a sub-make
 
 # Create the library; ranlib is for Darwin and maybe other systems.
 # Doesn't seem to do any damage on other systems.
@@ -25,12 +25,17 @@ libclientserver.a: connection.o server.o messagehandler.o clientcommandhandler.o
 	ar rv libclientserver.a  connection.o server.o messagehandler.o clientcommandhandler.o servercommandhandler.o article.o newsgroup.o in_memory.o on_disk.o
 	ranlib libclientserver.a 
 
+sub-make:
+	$(MAKE) -C test
+
 # Phony targets
 .PHONY: all clean
 
 # Standard clean
 clean:
 	rm -f *.o libclientserver.a
+	$(MAKE) -C test clean
+	#cd test && $(MAKE) clean
 
 # Generate dependencies in *.d files
 %.d: %.cc
@@ -42,3 +47,5 @@ clean:
 # Include the *.d files
 SRC = $(wildcard *.cc)
 include $(SRC:.cc=.d)
+
+
