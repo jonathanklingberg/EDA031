@@ -1,6 +1,7 @@
+#ifndef SERVER_COMMANDHANDLER_H
+#define SERVER_COMMANDHANDLER_H
 #include <string>
 #include <map>
-
 #include "messagehandler.h"
 
 using namespace std;
@@ -17,3 +18,4 @@ public:
 private:
     MessageHandler mh;
 };
+#endif

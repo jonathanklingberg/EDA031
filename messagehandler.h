@@ -1,3 +1,5 @@
+#ifndef MESSAGEHANDLER_H
+#define MESSAGEHANDLER_H
 #include "connection.h"
 #include <string>
 #include <memory>
@@ -20,3 +22,4 @@ public:
 private:
     Connection& conn;
 };
+#endif
