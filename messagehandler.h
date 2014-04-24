@@ -4,15 +4,13 @@
 #include <string>
 #include <memory>
 
-using namespace std;
-
 class MessageHandler {
     
 public:
     MessageHandler(Connection& c) : conn(c) {};
     void writeNumber(int value);
-    string readString(int n);
-    void writeString(const string& s);
+    std::string readString(int n);
+    void writeString(const std::string& s);
     int readNumber();
     void writeByte(unsigned char ch);
     void writeCode(unsigned char c);

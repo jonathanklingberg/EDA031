@@ -5,30 +5,28 @@
 #include <vector>
 #include "database_interface.h"
 
-using namespace std;
-
 class OnDisk : public DatabaseInterface {
 public:
     
     OnDisk();
     ~OnDisk() = default;
-	bool createNG(const string& news_group);
+	bool createNG(const std::string& news_group);
 	bool removeNG(int news_group_id);
-    vector<NewsGroup> listNGs() const;
-    vector<Article> listArticles(int news_group_id);
-	bool addArticle(int news_group_id, const string& art_title,
-		const string& art_author, const string& art_text);
+    std::vector<NewsGroup> listNGs() const;
+    std::vector<Article> listArticles(int news_group_id);
+	bool addArticle(int news_group_id, const std::string& art_title,
+		const std::string& art_author, const std::string& art_text);
 	bool removeArticle(int news_group_id, int article_id);
     
 private:
-	vector<NewsGroup> news_groups;
+	std::vector<NewsGroup> news_groups;
 	int getNextIndex();
-	vector<NewsGroup> listAllIds() const;
-	vector<Article> listAllArticleIds(string& path) const;
-	Article readArticle(string& path, int file_id) const;
-	void writeToNGList(vector<NewsGroup>& ngs);
-	void writeToArticleList(vector<Article>& arts, string& path);
-	void writeToArticle(Article& art, string& path);
+	std::vector<NewsGroup> listAllIds() const;
+	std::vector<Article> listAllArticleIds(std::string& path) const;
+	Article readArticle(std::string& path, int file_id) const;
+	void writeToNGList(std::vector<NewsGroup>& ngs);
+	void writeToArticleList(std::vector<Article>& arts, std::string& path);
+	void writeToArticle(Article& art, std::string& path);
 };
 
 #endif

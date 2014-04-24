@@ -5,23 +5,22 @@
 #include <vector>
 #include "database_interface.h"
 
-using namespace std;
 class InMemory : public DatabaseInterface {
 public:
     
     InMemory();
     ~InMemory() = default;
-	bool createNG(const string& news_group);
+	bool createNG(const std::string& news_group);
 	bool removeNG(int news_group_id);
-    vector<NewsGroup> listNGs() const;
-    vector<Article> listArticles(int news_group_id);
-	bool addArticle(int news_group_id, const string& art_title,
-		const string& art_author, const string& art_text);
+    std::vector<NewsGroup> listNGs() const;
+    std::vector<Article> listArticles(int news_group_id);
+	bool addArticle(int news_group_id, const std::string& art_title,
+		const std::string& art_author, const std::string& art_text);
 	bool removeArticle(int news_group_id, int article_id);
 	//Article InMemory::getArticle(int groupId, int artId) const;
     
 private:
-	vector<NewsGroup> news_groups;
+	std::vector<NewsGroup> news_groups;
 };
 
 #endif

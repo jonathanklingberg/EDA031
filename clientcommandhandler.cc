@@ -119,7 +119,8 @@ map<int, string> ClientCommandHandler::listArts(int group_nbr) {
             end_code = mh.readCode();
             return res;
         }
-            break;
+        default:
+            return res;
     }
 }
 
@@ -203,11 +204,7 @@ vector<string> ClientCommandHandler::getArt(int group_nbr,int art_nbr) {
             error = mh.readCode();
             end_code = mh.readCode();
 			return res;
+        default:
+            return res;
     }
 }
-
-
-
-
-
-
