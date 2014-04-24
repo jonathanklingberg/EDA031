@@ -1,20 +1,18 @@
 CPP 2005 Project, Communication Classes
 ---------------------------------------
 
-1. 'make' in the parent folder makes the library libclientserver.a.
+1. 'make' in the parent folder makes the library libclientserver.a along with the executables myclient, inmemoryserver and ondiskserver inside the parent folder ./test.
 
-2. 'make' inside the subdirectory ’test’ makes the executables myclient, inmemoryserver and ondiskserver but don’t forget to make the library in the parent folder first.
+2. The subdirectory 'test' now contains the test programs myclient, inmemoryserver and ondiskserver.
 
-3. The subdirectory 'test' now contains the test programs myclient, inmemoryserver and ondiskserver.
+3. Start the in memory version of the server by entering the test folder from a terminal and then enter: ’./inmemoryserver 13666’. If you get ”Server initialization error” try another port number. 
 
-4. Start the in memory version of the server by entering the test folder from a terminal and then enter: ’./inmemoryserver 1337’.
+4. Run the java-tester from another terminal window: ’java -jar BetterTestServer2.jar localhost 13666’
 
-5. Run the java-tester from another terminal window: ’java -jar BetterTestServer2.jar localhost 1337’
+5. Hit the ’run all tests’-button, look at the result and exit the testprogram.
 
-6. Hit the ’run all tests’-button, look at the result and exit the testprogram.
+6. Open a terminal, enter the test-folder and now run the CLI-client: ’./myclient localhost 13666’
 
-7. Open a terminal, enter the test-folder and now run the CLI-client: ’./myclient localhost 1337’
+7. Hit ’-h’ to list all available commands and follow the instructions from there.
 
-8. Hit ’-h’ to list all available commands and follow the instructions from there.
-
-9. Exit the CLI and terminate the in memory server and repeat everything from step 4 but now run the on disk version of the server by replacing the command in step 4 with the following: ’./ondiskmemory 1337’.
+8. Exit the CLI and terminate the in memory server and repeat everything from step 4 but now run the on disk version of the server by replacing the command in step 4 with the following: ’./ondiskmemory 13666’.
